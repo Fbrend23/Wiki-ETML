@@ -23,7 +23,7 @@ const mobileMenu = ref(false)
 const dark = ref(false)
 
 onMounted(() => {
-  dark.value = localStorage.getItem('theme') === 'dark'
+  dark.value = localStorage.getItem('theme') !== 'light'
   document.documentElement.setAttribute('data-bs-theme', dark.value ? 'dark' : 'light')
 })
 

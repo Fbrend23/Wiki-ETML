@@ -2,7 +2,7 @@
 
 _(Source : DevOps Introduction)_
 
-### ✔️ Les 7 principes
+### Les 7 principes
 
 1. Éliminer le gaspillage
 2. Renforcer l’apprentissage
@@ -29,36 +29,35 @@ _(Source : DevOps Introduction)_
 
 #### Bonnes pratiques Lean/Agile
 
-1.  **Cycles d’itérations**
-    - Découper le projet en mini-cycles complets.
-    - Tester, livrer et recueillir des retours régulièrement.
+- **Cycles d’itérations**
+  - Découper le projet en mini-cycles complets.
+  - Tester, livrer et recueillir des retours régulièrement.
+- **Réunions quotidiennes**
+  - Synchroniser l’équipe
+  - Identifier les obstacles
+  - Ajuster le travail du jour
+- **Automatisation des tests**
+  - Types de tests automatisables :
+    - unitaires
+    - intégration
+    - autres tests répétitifs
+- **Intégration Continue (CI)**
+  - Intégrer le code fréquemment dans un repo partagé
+  - Compiler + exécuter des tests automatisés
+  - Détecter les bugs tôt = moins coûteux
+- **Livraison Continue (CD)**
+  - Compiler automatiquement
+  - Tester automatiquement
+  - Générer un artefact prêt à déployer
+    → Permet des sorties plus fréquentes et fiables.
+- **Engagement continu du client**
+  - Évite de livrer un produit qui ne répond pas aux besoins
+  - Les stakeholders doivent être impliqués très tôt
 
-2.  **Réunions quotidiennes**
-    - Synchroniser l’équipe
-    - Identifier les obstacles
-    - Ajuster le travail du jour
+6. **Engagement continu du client**
 
-3.  **Automatisation des tests**
-    - Types de tests automatisables :
-      - unitaires
-      - intégration
-      - autres tests répétitifs
-
-4.  **Intégration Continue (CI)**
-    - Intégrer le code fréquemment dans un repo partagé
-    - Compiler + exécuter des tests automatisés
-    - Détecter les bugs tôt = moins coûteux
-
-5.  **Livraison Continue (CD)**
-    - Compiler automatiquement
-    - Tester automatiquement
-    - Générer un artefact prêt à déployer
-
-→ Permet des sorties plus fréquentes et fiables.
-
-1.  **Engagement continu du client**
-    - Évite de livrer un produit qui ne répond pas aux besoins
-    - Les stakeholders doivent être impliqués très tôt
+- Évite de livrer un produit qui ne répond pas aux besoins
+- Les stakeholders doivent être impliqués très tôt
 
 #### Conclusion Lean
 
