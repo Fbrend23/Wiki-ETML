@@ -18,6 +18,7 @@ const selected = ref(null)
 
 // menus
 const mobileMenu = ref(false)
+const desktopMenu = ref(true)
 
 // Thème sombre
 const dark = ref(false)
@@ -41,12 +42,25 @@ function toggleTheme() {
 
       <!-- Mobile top-bar -->
       <nav class="navbar d-md-none border-bottom">
-        <div class="container-fluid">
+        <div class="container-fluid justify-content-between">
           <button class="navbar-toggler" type="button" @click="mobileMenu = true">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <span class="navbar-brand mb-0 h1">Révisions</span>
-          <button @click="toggleTheme" class="btn fs-5">
+          <h1 class="mb-0 h1 mx-auto">ETML Wiki</h1>
+          <button @click="toggleTheme" class="btn fs-5" style="width: 42px;">
+            {{ dark ? '☀️' : '🌙' }}
+          </button>
+        </div>
+      </nav>
+
+      <!-- Desktop top-bar -->
+      <nav class="navbar d-none d-md-flex border-bottom">
+        <div class="container-fluid justify-content-between">
+          <button class="navbar-toggler" type="button" @click="desktopMenu = !desktopMenu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1 class="mb-0 h1 mx-auto">ETML Wiki</h1>
+          <button @click="toggleTheme" class="btn fs-5" style="width: 42px;">
             {{ dark ? '☀️' : '🌙' }}
           </button>
         </div>
@@ -58,7 +72,8 @@ function toggleTheme() {
           @click.self="mobileMenu = false" style="z-index: 1040;">
           <div class="h-100 p-3 shadow-lg overflow-y-auto bg-body w-100">
             <div class="d-flex justify-content-between align-items-center mb-4">
-              <h2 class="h4 fw-bold">Révisions</h2>
+              <div style="width: 40px;"></div> <!-- Placeholder for centering -->
+              <h1 class="mb-0 h1 mx-auto">ETML Wiki</h1>
               <button @click="mobileMenu = false" class="btn-close"></button>
             </div>
 
@@ -84,13 +99,8 @@ function toggleTheme() {
 
       <div class="d-flex flex-grow-1 overflow-hidden">
         <!-- SIDEBAR DESKTOP -->
-        <aside class="d-none d-md-flex flex-column border-end p-3 overflow-y-auto" style="width: 16rem;">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h4 fw-bold">Révisions</h2>
-            <button @click="toggleTheme" class="btn fs-5">
-              {{ dark ? '☀️' : '🌙' }}
-            </button>
-          </div>
+        <aside v-if="desktopMenu" class="d-none d-md-flex flex-column border-end p-3 overflow-y-auto"
+          style="width: 16rem;">
 
           <div v-for="(files, category) in categories" :key="category" class="mb-4">
             <h3 class="fw-semibold fs-5 mb-2">{{ category }}</h3>
