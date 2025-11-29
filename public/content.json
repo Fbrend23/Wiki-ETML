@@ -1,0 +1,16 @@
+{
+  "DevOps-324": [
+    {
+      "name": "Lean",
+      "file": "/public/markdown/DevOps-324/1-Lean.md"
+    },
+    {
+      "name": "DevOps",
+      "file": "/public/markdown/DevOps-324/2-DevOps.md"
+    },
+    {
+      "name": "Git",
+      "file": "/public/markdown/DevOps-324/3-Git.md"
+    }
+  ]
+}

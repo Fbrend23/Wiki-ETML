@@ -25,6 +25,9 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run gen:audio
 
+      - name: Générer l'index du contenu
+        run: npm run gen:content
+
       - name: Build
         run: npm run build
 
