@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import MarkdownIt from 'markdown-it'
 
 const props = defineProps({
@@ -17,10 +17,28 @@ const md = new MarkdownIt({
 
 const html = ref('')
 
+// Calcul automatique du chemin vers le MP3
+// Transforme "/markdown/Dossier/mon-cours.md" -> "/audio/mon-cours.mp3"
+const audioSrc = computed(() => {
+    if (!props.file) return null
+    // Récupère le nom du fichier sans le chemin
+    const filename = props.file.split('/').pop()
+    if (!filename) return null
+
+    // Remplace l'extension .md par .mp3
+    const mp3Name = filename.replace('.md', '.mp3')
+
+    return `/audio/${mp3Name}`
+})
+
 async function load() {
     if (!props.file) return
-    const text = await fetch(props.file).then(res => res.text())
-    html.value = md.render(text)
+    try {
+        const text = await fetch(props.file).then(res => res.text())
+        html.value = md.render(text)
+    } catch (e) {
+        html.value = "<div class='alert alert-danger'>Erreur de chargement du contenu</div>"
+    }
 }
 
 // charge au montage
@@ -31,7 +49,20 @@ watch(() => props.file, load)
 </script>
 
 <template>
-    <div class="markdown-body">
+    <div class="markdown-body position-relative">
+
+        <div v-if="audioSrc" class="card border-0 shadow-sm mb-4 bg-body-tertiary">
+            <div class="card-body d-flex align-items-center gap-3 py-2">
+                <div class="fs-2">🎧</div>
+                <div class="flex-grow-1">
+                    <h6 class="mb-1 small text-muted fw-bold text-uppercase" style="letter-spacing: 0.5px;">
+                        Version Audio
+                    </h6>
+                    <audio controls :src="audioSrc" class="w-100" style="height: 32px;"></audio>
+                </div>
+            </div>
+        </div>
+
         <article v-html="html"></article>
     </div>
 </template>
