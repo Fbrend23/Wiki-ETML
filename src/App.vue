@@ -3,15 +3,7 @@ import { ref, onMounted } from 'vue'
 import MarkdownViewer from './components/MarkdownViewer.vue'
 import { BApp } from 'bootstrap-vue-next'
 // Liste dynamique des catégories + fichiers
-const categories = {
-  DevOps: [
-    { name: 'Lean', file: '/markdown/DevOps-324/1-lean.md' },
-    { name: 'DevOps', file: '/markdown/DevOps-324/2-devops.md' },
-    { name: 'Git', file: '/markdown/DevOps-324/3-git.md' },
-  ],
-  Web: [],
-  POO: [],
-}
+const categories = ref<Record<string, any[]>>({})
 
 // fiche sélectionnée
 const selected = ref(null)
@@ -23,9 +15,19 @@ const desktopMenu = ref(true)
 // Thème sombre
 const dark = ref(false)
 
-onMounted(() => {
+onMounted(async () => {
   dark.value = localStorage.getItem('theme') !== 'light'
   document.documentElement.setAttribute('data-bs-theme', dark.value ? 'dark' : 'light')
+
+  // Gestion dynamique du contenu
+  try {
+    const response = await fetch('/content.json')
+    if (response.ok) {
+      categories.value = await response.json()
+    }
+  } catch (e) {
+    console.error("Impossible de charger le sommaire", e)
+  }
 })
 
 function toggleTheme() {

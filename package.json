@@ -8,11 +8,12 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node generate-index.js && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
-    "gen:audio": "node generate-audio.js"
+    "gen:audio": "node generate-audio.js",
+    "gen:content": "node generate-index.js"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
