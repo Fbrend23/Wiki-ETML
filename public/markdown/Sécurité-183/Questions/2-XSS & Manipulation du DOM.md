@@ -28,13 +28,15 @@ Protection efficace → combinaison de plusieurs approches :
 1. **Échappement systématique** du contenu avant affichage dans les templates.
 2. **Frameworks modernes** (React, Vue, Angular) qui échappent automatiquement le HTML injecté.
 3. Validation stricte côté serveur :
-   - supprimer les balises `<script>`,
-   - filtrer les événements HTML (`onclick`, `onload`).
+
+- supprimer les balises `<script>`,
+- filtrer les événements HTML (`onclick`, `onload`).
 
 4. Application d’une **Content Security Policy** :
-   - empêche l’exécution de scripts inline,
-   - limite les sources autorisées,
-   - bloque les injections même si elles passent dans le DOM.
+
+- empêche l’exécution de scripts inline,
+- limite les sources autorisées,
+- bloque les injections même si elles passent dans le DOM.
 
 Une bonne CSP peut neutraliser **la majorité des XSS**.
 
