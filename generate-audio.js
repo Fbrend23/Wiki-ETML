@@ -3,6 +3,7 @@ import path from 'node:path'
 import MarkdownIt from 'markdown-it'
 import { glob } from 'glob'
 import 'dotenv/config'
+import process from 'node:process'
 
 const OPENAI_KEY = process.env.OPENAI_API_KEY
 const MARKDOWN_DIR = 'public/markdown'
@@ -29,7 +30,7 @@ async function generateAudio() {
   if (!fs.existsSync(AUDIO_DIR)) fs.mkdirSync(AUDIO_DIR, { recursive: true })
 
   const files = await glob(`${MARKDOWN_DIR}/**/*.md`)
-  console.log(`${files.length} fichiers trouvés. Mode: GPT-4o Audio (Instruct).`)
+  console.log(`${files.length} fichiers trouvés. Mode: GPT-4o Audio.`)
 
   for (const file of files) {
     const filename = path.basename(file, '.md')
@@ -44,59 +45,69 @@ async function generateAudio() {
 
     // Lecture du fichier
     const content = fs.readFileSync(file, 'utf-8')
+
+    // ---- Extraction des instructions personnalisées ----
+    const instructionMatch = content.match(/<!-- INSTRUCTION_AUDIO:([\s\S]*?)-->/)
+    const extraInstruction = instructionMatch ? instructionMatch[1].trim() : ''
+
+    const contentWithoutInstruction = instructionMatch
+      ? content.replace(instructionMatch[0], '')
+      : content
+
+    // ---- Markdown → texte ----
     const rawText = md
-      .render(content)
+      .render(contentWithoutInstruction)
       .replace(/<[^>]*>/g, '')
       .trim()
 
+    // ---- Fusion du prompt ----
+    const finalSystemPrompt = SYSTEM_INSTRUCTION + '\n\n' + extraInstruction
+
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('https://api.openai.com/v1/responses', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${OPENAI_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4o-audio-preview',
-          modalities: ['text', 'audio'],
+          model: 'gpt-4o',
+          input: [
+            { role: 'system', content: finalSystemPrompt },
+            { role: 'user', content: `Voici le cours à lire :\n\n${rawText}` },
+          ],
+          modalities: ['audio'],
           audio: {
             voice: 'alloy',
             format: 'mp3',
           },
-          messages: [
-            {
-              role: 'system',
-              content: SYSTEM_INSTRUCTION,
-            },
-            {
-              role: 'user',
-              content: `Voici le cours à lire : \n\n${rawText}`,
-            },
-          ],
         }),
       })
 
       if (!response.ok) {
         const err = await response.text()
-        throw new Error(`API Error ${response.status}: ${err}`)
+        throw new Error(`API error ${response.status} : ${err}`)
       }
 
       const data = await response.json()
 
-      // GPT-4o Audio renvoie l'audio en base64 dans le JSON
-      const audioBase64 = data.choices[0].message.audio.data
-      const audioId = data.choices[0].message.audio.id
+      // ---- Récupération correcte côté GPT-4o Final ----
+      const audioBase64 =
+        data.output?.[0]?.audio?.data ?? data.output?.[0]?.content?.[0]?.audio?.data
 
-      // Conversion Base64 -> Fichier binaire
+      if (!audioBase64) {
+        console.error('Aucune donnée audio renvoyée par OpenAI.')
+        console.log(JSON.stringify(data, null, 2))
+        continue
+      }
+      // eslint-disable-next-line no-undef
       const buffer = Buffer.from(audioBase64, 'base64')
-
       fs.writeFileSync(audioPath, buffer)
-      console.log(`${filename} généré avec succès (ID: ${audioId})`)
 
-      // Pause de sécurité
-      await sleep(2000)
+      console.log(`${filename} généré avec succès !`)
+      await sleep(1500)
     } catch (err) {
-      console.error(`Erreur sur ${filename}:`, err.message)
+      console.error(`Erreur sur ${filename} :`, err.message)
     }
   }
 }

@@ -36,7 +36,7 @@ async function load() {
     try {
         const text = await fetch(props.file).then(res => res.text())
         html.value = md.render(text)
-    } catch (e) {
+    } catch {
         html.value = "<div class='alert alert-danger'>Erreur de chargement du contenu</div>"
     }
 }
