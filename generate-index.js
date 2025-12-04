@@ -16,15 +16,26 @@ async function generateIndex() {
   const structure = {}
 
   for (const file of files) {
-    // Récupérer le dossier parent (ex: DevOps-324)
-    const category = path.dirname(file).split(path.sep).pop()
+    // Calcul du chemin relatif (ex: DevOps-324/Chapitre1/cours.md)
+    const relativePath = path.relative(MARKDOWN_DIR, file)
+    const parts = relativePath.split(path.sep)
+
+    // Ignore les fichiers à la racine pure de 'markdown' s'il y en a
+    if (parts.length < 2) continue
+
+    // Le premier dossier est TOUJOURS le Module (ex: DevOps-324)
+    const moduleName = parts[0]
+
+    // Le reste est le Sujet (ex: Chapitre1). Si pas de sous-dossier => Général
+    let subCategory = 'Général'
+    if (parts.length > 2) {
+      subCategory = parts.slice(1, parts.length - 1).join(' > ')
+    }
+
+    const category = `${moduleName} > ${subCategory}`
 
     const filename = path.basename(file, '.md')
-
-    // Enlève la numérotation
     const displayName = filename.replace(/^\d+-/, '')
-
-    // Chemin relatif pour le navigateur
     const webPath = '/' + file.replace('public/', '').replace(/\\/g, '/')
 
     if (!structure[category]) {
@@ -38,7 +49,7 @@ async function generateIndex() {
   }
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(structure, null, 2))
-  console.log(`Index généré et trié : ${Object.keys(structure).length} catégories.`)
+  console.log(`Index généré : ${Object.keys(structure).length} catégories.`)
 }
 
 generateIndex()
