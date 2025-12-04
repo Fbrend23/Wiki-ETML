@@ -24,33 +24,34 @@ Le salt doit être **unique**, **long**, **aléatoire** et **stocké avec le has
 
 ## **LOGIN2 — Exemples de mots de passe selon difficulté**
 
-1. **Cracké instantanément**
-   Mots de passe trop courts ou très connus.
-   Ils sont présents dans toutes les bases de données d’attaques (rockyou.txt).
-   Un pirate teste d’abord ces valeurs avant toute attaque plus coûteuse.
+**Cracké instantanément**
+Mots de passe trop courts ou très connus.
+Ils sont présents dans toutes les bases de données d’attaques (rockyou.txt).
+Un pirate teste d’abord ces valeurs avant toute attaque plus coûteuse.
 
-2. **Cracké en minutes/heures**
-   Combinaisons un peu variées mais basées sur des schémas prévisibles :
-   - ajout d’un chiffre en fin,
-   - remplacement de lettres évidentes (o → 0).
-     Ces “stratégies” ne trompent pas les outils modernes.
+**Cracké en minutes/heures**
+Combinaisons un peu variées mais basées sur des schémas prévisibles :
 
-3. **Cracké en années**
-   Phrases secrètes longues, combinant plusieurs classes de caractères.
-   Leur longueur augmente **exponentiellement** l’espace de recherche.
-   Plus important encore : elles sont **difficiles à deviner et à retenir pour un attaquant**, mais **faciles à retenir pour l’utilisateur**.
+- ajout d’un chiffre en fin,
+- remplacement de lettres évidentes (o → 0).
+  Ces “stratégies” ne trompent pas les outils modernes.
+
+**Cracké en années**
+Phrases secrètes longues, combinant plusieurs classes de caractères.
+Leur longueur augmente **exponentiellement** l’espace de recherche.
+Plus important encore : elles sont **difficiles à deviner et à retenir pour un attaquant**, mais **faciles à retenir pour l’utilisateur**.
 
 ---
 
 ## **LOGIN3 — Différence entre hachage et chiffrement**
 
-- **Hachage** : opération **à sens unique**.
-  On utilise des algorithmes conçus pour être **lents** (bcrypt, Argon2) et qui résistent aux attaques GPU.
-  Idéal pour les mots de passe, car un attaquant ne peut jamais “récupérer” la valeur d’origine.
+**Hachage** : opération **à sens unique**.
+On utilise des algorithmes conçus pour être **lents** (bcrypt, Argon2) et qui résistent aux attaques GPU.
+Idéal pour les mots de passe, car un attaquant ne peut jamais “récupérer” la valeur d’origine.
 
-- **Chiffrement** : opération **réversible**.
-  Si une clé fuite, toute la donnée devient compromise.
-  Utile pour la confidentialité : numéros de cartes, documents privés, fichiers sensibles.
+**Chiffrement** : opération **réversible**.
+Si une clé fuite, toute la donnée devient compromise.
+Utile pour la confidentialité : numéros de cartes, documents privés, fichiers sensibles.
 
 Un système sécurisé doit savoir **quand utiliser l’un ou l’autre**.
 Les mots de passe ne doivent **jamais** être chiffrés.
@@ -80,9 +81,10 @@ C’est pour cela que :
 2. Combiner le mot de passe au salt.
 3. Hacher avec un algorithme **résistant au brute-force** (bcrypt, Argon2, scrypt).
 4. Stocker **uniquement le résultat** :
-   - le hash,
-   - **+** le salt,
-   - **+** éventuellement le coût utilisé (`cost factor`).
+
+- le hash,
+- **+** le salt,
+- **+** éventuellement le coût utilisé (`cost factor`).
 
 Ainsi, même si la base est volée :
 

@@ -13,9 +13,10 @@ Ne lis pas ce bloc.
 1. Obfuscation simple (`[at]`) : inefficace contre les bots modernes.
 2. Encodage HTML : améliore un peu la protection.
 3. Formulaire :
-   - empêche l’exposition directe de l’adresse,
-   - permet antispam (captcha),
-   - protège mieux la boîte mail.
+
+- empêche l’exposition directe de l’adresse,
+- permet antispam (captcha),
+- protège mieux la boîte mail.
 
 ---
 
