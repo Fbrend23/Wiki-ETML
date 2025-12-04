@@ -42,7 +42,7 @@ const groupedCategories = computed(() => {
       sortedSubCats['Général'] = subCats['Général']
     }
 
-    // Puis les autres sous-catégories triées
+    // Puis les autres sous-catégories par ordre alphabétique
     Object.keys(subCats)
       .filter(k => k !== 'Général')
       .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
@@ -123,6 +123,7 @@ function toggleTheme() {
 
             <div v-for="(subCats, mainCat) in groupedCategories" :key="mainCat" class="mb-4">
               <h3 class="fw-bold fs-5 mb-2 text-primary">{{ mainCat }}</h3>
+
               <div v-for="(files, subCat) in subCats" :key="subCat" class="mb-3">
                 <h4 v-if="subCat !== 'Général' || Object.keys(subCats).length > 1"
                   class="fw-semibold fs-6 mb-2 text-muted ms-2 mt-3">
@@ -149,6 +150,7 @@ function toggleTheme() {
 
           <div v-for="(subCats, mainCat) in groupedCategories" :key="mainCat" class="mb-4">
             <h3 class="fw-bold fs-5 mb-2 text-primary">{{ mainCat }}</h3>
+
             <div v-for="(files, subCat) in subCats" :key="subCat" class="mb-3">
               <h4 v-if="subCat !== 'Général' || Object.keys(subCats).length > 1"
                 class="fw-semibold fs-6 mb-2 text-muted ms-2 mt-3">

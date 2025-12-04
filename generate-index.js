@@ -16,24 +16,26 @@ async function generateIndex() {
   const structure = {}
 
   for (const file of files) {
-    const dir = path.dirname(file)
-    let categoryPath = path.relative(MARKDOWN_DIR, dir)
+    // Calcul du chemin relatif (ex: DevOps-324/Chapitre1/cours.md)
+    const relativePath = path.relative(MARKDOWN_DIR, file)
+    const parts = relativePath.split(path.sep)
 
-    // Gestion des fichiers à la racine (s'il y en a)
-    if (!categoryPath || categoryPath === '.') {
-      categoryPath = 'Général'
+    // Ignore les fichiers à la racine pure de 'markdown' s'il y en a
+    if (parts.length < 2) continue
+
+    // Le premier dossier est TOUJOURS le Module (ex: DevOps-324)
+    const moduleName = parts[0]
+
+    // Le reste est le Sujet (ex: Chapitre1). Si pas de sous-dossier => Général
+    let subCategory = 'Général'
+    if (parts.length > 2) {
+      subCategory = parts.slice(1, parts.length - 1).join(' > ')
     }
 
-    // Remplace les slashs (/) ou backslashs (\) par un séparateur visuel " > "
-    // Ex: "DevOps-324/Chapitre-1" deviendra "DevOps-324 > Chapitre-1"
-    const category = categoryPath.replace(/[\\/]/g, ' > ')
+    const category = `${moduleName} > ${subCategory}`
 
     const filename = path.basename(file, '.md')
-
-    // Enlève la numérotation
     const displayName = filename.replace(/^\d+-/, '')
-
-    // Chemin relatif pour le navigateur
     const webPath = '/' + file.replace('public/', '').replace(/\\/g, '/')
 
     if (!structure[category]) {
@@ -47,9 +49,7 @@ async function generateIndex() {
   }
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(structure, null, 2))
-  console.log(
-    `Index généré : ${Object.keys(structure).length} catégories (y compris sous-dossiers).`,
-  )
+  console.log(`Index généré : ${Object.keys(structure).length} catégories.`)
 }
 
 generateIndex()
