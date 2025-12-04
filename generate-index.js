@@ -16,8 +16,17 @@ async function generateIndex() {
   const structure = {}
 
   for (const file of files) {
-    // Récupérer le dossier parent (ex: DevOps-324)
-    const category = path.dirname(file).split(path.sep).pop()
+    const dir = path.dirname(file)
+    let categoryPath = path.relative(MARKDOWN_DIR, dir)
+
+    // Gestion des fichiers à la racine (s'il y en a)
+    if (!categoryPath || categoryPath === '.') {
+      categoryPath = 'Général'
+    }
+
+    // Remplace les slashs (/) ou backslashs (\) par un séparateur visuel " > "
+    // Ex: "DevOps-324/Chapitre-1" deviendra "DevOps-324 > Chapitre-1"
+    const category = categoryPath.replace(/[\\/]/g, ' > ')
 
     const filename = path.basename(file, '.md')
 
@@ -38,7 +47,9 @@ async function generateIndex() {
   }
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(structure, null, 2))
-  console.log(`Index généré et trié : ${Object.keys(structure).length} catégories.`)
+  console.log(
+    `Index généré : ${Object.keys(structure).length} catégories (y compris sous-dossiers).`,
+  )
 }
 
 generateIndex()

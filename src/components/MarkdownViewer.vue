@@ -21,14 +21,7 @@ const html = ref('')
 // Transforme "/markdown/Dossier/mon-cours.md" -> "/audio/mon-cours.mp3"
 const audioSrc = computed(() => {
     if (!props.file) return null
-    // Récupère le nom du fichier sans le chemin
-    const filename = props.file.split('/').pop()
-    if (!filename) return null
-
-    // Remplace l'extension .md par .mp3
-    const mp3Name = filename.replace('.md', '.mp3')
-
-    return `/audio/${mp3Name}`
+    return props.file.replace('/markdown/', '/audio/').replace('.md', '.mp3')
 })
 
 async function load() {
