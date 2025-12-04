@@ -30,7 +30,7 @@ async function generateAudio() {
   if (!fs.existsSync(AUDIO_DIR)) fs.mkdirSync(AUDIO_DIR, { recursive: true })
 
   const files = await glob(`${MARKDOWN_DIR}/**/*.md`)
-  console.log(`${files.length} fichiers trouvés. Mode: GPT-4o Audio.`)
+  console.log(`${files.length} fichiers trouvés. Mode : gpt-4o-mini-tts.`)
 
   for (const file of files) {
     const filename = path.basename(file, '.md')
@@ -43,7 +43,6 @@ async function generateAudio() {
 
     console.log(`Enregistrement IA (${filename})...`)
 
-    // Lecture du fichier
     const content = fs.readFileSync(file, 'utf-8')
 
     // ---- Extraction des instructions personnalisées ----
@@ -61,26 +60,24 @@ async function generateAudio() {
       .trim()
 
     // ---- Fusion du prompt ----
-    const finalSystemPrompt = SYSTEM_INSTRUCTION + '\n\n' + extraInstruction
+    const finalPrompt =
+      SYSTEM_INSTRUCTION +
+      '\n\n' +
+      (extraInstruction ? `Instruction spécifique : ${extraInstruction}\n\n` : '') +
+      `Voici le texte à lire :\n\n${rawText}`
 
     try {
-      const response = await fetch('https://api.openai.com/v1/responses', {
+      const response = await fetch('https://api.openai.com/v1/audio/speech', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${OPENAI_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4o',
-          input: [
-            { role: 'system', content: finalSystemPrompt },
-            { role: 'user', content: `Voici le cours à lire :\n\n${rawText}` },
-          ],
-          modalities: ['audio'],
-          audio: {
-            voice: 'alloy',
-            format: 'mp3',
-          },
+          model: 'gpt-4o-mini-tts',
+          voice: 'alloy',
+          input: finalPrompt,
+          format: 'mp3',
         }),
       })
 
@@ -89,22 +86,14 @@ async function generateAudio() {
         throw new Error(`API error ${response.status} : ${err}`)
       }
 
-      const data = await response.json()
-
       // ---- Récupération correcte côté GPT-4o Final ----
-      const audioBase64 =
-        data.output?.[0]?.audio?.data ?? data.output?.[0]?.content?.[0]?.audio?.data
-
-      if (!audioBase64) {
-        console.error('Aucune donnée audio renvoyée par OpenAI.')
-        console.log(JSON.stringify(data, null, 2))
-        continue
-      }
+      const arrayBuffer = await response.arrayBuffer()
       // eslint-disable-next-line no-undef
-      const buffer = Buffer.from(audioBase64, 'base64')
+      const buffer = Buffer.from(arrayBuffer)
+
       fs.writeFileSync(audioPath, buffer)
 
-      console.log(`${filename} généré avec succès !`)
+      console.log(`${filename}.mp3 généré avec succès !`)
       await sleep(1500)
     } catch (err) {
       console.error(`Erreur sur ${filename} :`, err.message)
