@@ -27,21 +27,31 @@ async function generateAudio() {
     process.exit(1)
   }
 
-  if (!fs.existsSync(AUDIO_DIR)) fs.mkdirSync(AUDIO_DIR, { recursive: true })
+  // On retire la création du dossier racine ici car on va gérer les sous-dossiers dans la boucle
 
   const files = await glob(`${MARKDOWN_DIR}/**/*.md`)
   console.log(`${files.length} fichiers trouvés. Mode : gpt-4o-mini-tts.`)
 
   for (const file of files) {
-    const filename = path.basename(file, '.md')
-    const audioPath = path.join(AUDIO_DIR, `${filename}.mp3`)
+    // Récupère le chemin relatif (ex: 'DevOps-324/1-Lean.md')
+    const relativePath = path.relative(MARKDOWN_DIR, file)
+
+    // Construit le chemin audio en remplaçant l'extension
+    // ex: public/audio/DevOps-324/1-Lean.mp3
+    const audioPath = path.join(AUDIO_DIR, relativePath.replace(/\.md$/, '.mp3'))
+
+    // Check dossier parent
+    const audioDir = path.dirname(audioPath)
+    if (!fs.existsSync(audioDir)) {
+      fs.mkdirSync(audioDir, { recursive: true })
+    }
 
     if (fs.existsSync(audioPath)) {
-      console.log(`Existe déjà : ${filename}`)
+      console.log(`Existe déjà : ${relativePath}`)
       continue
     }
 
-    console.log(`Enregistrement IA (${filename})...`)
+    console.log(`Enregistrement IA (${relativePath})...`)
 
     const content = fs.readFileSync(file, 'utf-8')
 
@@ -86,17 +96,17 @@ async function generateAudio() {
         throw new Error(`API error ${response.status} : ${err}`)
       }
 
-      // ---- Récupération correcte côté GPT-4o Final ----
       const arrayBuffer = await response.arrayBuffer()
       // eslint-disable-next-line no-undef
       const buffer = Buffer.from(arrayBuffer)
 
       fs.writeFileSync(audioPath, buffer)
 
+      const filename = path.basename(file, '.md')
       console.log(`${filename}.mp3 généré avec succès !`)
       await sleep(1500)
     } catch (err) {
-      console.error(`Erreur sur ${filename} :`, err.message)
+      console.error(`Erreur sur ${relativePath} :`, err.message)
     }
   }
 }
