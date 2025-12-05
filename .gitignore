@@ -37,3 +37,5 @@ __screenshots__/
 .env
 
 public/audio/*.mp3
+public/audio/DevOps-324/3-Git.mp3
+*.mp3
