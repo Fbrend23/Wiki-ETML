@@ -2,8 +2,9 @@
 
 # Touring Vue Router - Introduction
 
-Source: C-294-ALL01-Touring Vue Router (ETML ICT 294).  
-Version enrichie pour révision.
+Source: C-294-ALL01-Touring Vue Router (ETML ICT 294).
+
+> Pas d'audio
 
 ## Objectif du module
 
