@@ -48,7 +48,10 @@ async function generateAudio() {
     console.log(`\nTraitement de : ${relativePath}`)
 
     const content = fs.readFileSync(file, 'utf-8')
-
+    if (content.includes('NoAudio')) {
+      console.log(` Audio désactivé pour ${relativePath}`)
+      continue
+    }
     const instructionMatch = content.match(/<!-- INSTRUCTION_AUDIO:([\s\S]*?)-->/)
     const extraInstruction = instructionMatch ? instructionMatch[1].trim() : ''
 
