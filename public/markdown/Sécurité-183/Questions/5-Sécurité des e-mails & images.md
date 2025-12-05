@@ -6,7 +6,7 @@ Ne lis pas ce bloc.
 
 # **5. E-mails & images**
 
-## _(Source : I183-TS2-ListeDesQuestions.pdf)_
+_(Source : I183-TS2-ListeDesQuestions.pdf)_
 
 ## **MAIL1 — Trois manières de protéger son adresse mail**
 
