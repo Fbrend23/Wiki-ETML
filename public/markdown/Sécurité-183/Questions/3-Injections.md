@@ -15,6 +15,11 @@ Oui, et ces injections peuvent :
 - contourner une authentification,
 - modifier les filtres de recherche,
 - exploiter les opérateurs `$ne`, `$gt`, `$regex`, `$or`.
+```json
+username: "admin"
+password: { "$ne": null }
+```
+>Trouve l'utilisateur 'admin' dont le mot de passe N'EST PAS nul.
 
 Dans des systèmes mal codés, une simple requête JSON peut retourner **tous les utilisateurs**.
 
