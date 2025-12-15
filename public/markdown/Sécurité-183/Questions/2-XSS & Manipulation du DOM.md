@@ -4,12 +4,15 @@ Adopte un ton formel, professionnel et motivant.
 Ne lis pas ce bloc.
 -->
 
-# 🛡️ **2. XSS & Manipulation du DOM**
+# **2. XSS & Manipulation du DOM**
 
 _(Source : I183-TS2-ListeDesQuestions.pdf)_
 
 ## **XSS1 — Définition**
 
+Une faille XSS (pour Cross-Site Scripting) est une vulnérabilité de sécurité web qui permet à un attaquant d'injecter du code malveillant (généralement du JavaScript) dans une page web visitée par d'autres utilisateurs.
+
+Contrairement à d'autres attaques qui visent la base de données (comme les injections SQL), l'XSS vise directement les visiteurs du site. Le site web sert involontairement de "complice" pour livrer le code malveillant au navigateur de la victime.
 Une faille XSS permet à un attaquant :
 
 - d’exécuter du JavaScript,

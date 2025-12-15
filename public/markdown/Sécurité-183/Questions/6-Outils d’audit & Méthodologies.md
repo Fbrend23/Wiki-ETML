@@ -18,7 +18,7 @@ _(Source : I183-TS2-ListeDesQuestions.pdf)_
 
 ## **OUTIL2 — Metasploit**
 
-Framework permettant :
+C'est un framework permettant :
 
 - exploitation de failles connues (modules),
 - création d’exploits personnalisés,
