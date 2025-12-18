@@ -16,32 +16,47 @@ const searchResults = computed(() => {
   if (!searchQuery.value || searchQuery.value.length < 2) return []
 
   const query = searchQuery.value.toLowerCase()
+  const keywords = query.split(/\s+/).filter(k => k.length > 0)
   const results = []
+
+  if (keywords.length === 0) return []
 
   for (const [category, files] of Object.entries(categories.value)) {
     for (const file of files) {
       let snippet = ''
       let matchFound = false
 
-      // 1. Recherche dans le NOM
-      if (file.name.toLowerCase().includes(query)) {
-        matchFound = true
-      }
-      // 2. Recherche dans le CONTENU
-      else if (file.content && file.content.includes(query)) {
-        matchFound = true
-        // Extraction de l'extrait
-        const index = file.content.indexOf(query)
-        const start = Math.max(0, index - 30)
-        const end = Math.min(file.content.length, index + query.length + 40)
-        let text = file.content.substring(start, end)
+      const nameLower = file.name.toLowerCase()
+      // On assume que le contenu est déjà chargé ou présent. Si c'est null, on met chaîne vide.
+      const contentLower = file.content ? file.content.toLowerCase() : ''
 
-        // Mise en évidence
-        // On utilise un style plus visible : Gras + Couleur Primaire + Fond léger
-        text = text.replace(new RegExp(query, 'gi'), (match) =>
-          `<span class="fw-bold text-primary bg-primary-subtle px-1 rounded border border-primary-subtle">${match}</span>`
-        )
-        snippet = `... ${text} ...`
+      // Vérifie si TOUS les mots-clés sont présents soit dans le titre, soit dans le contenu
+      // (Pas forcément tous au même endroit, c'est un "AND" global)
+      const allKeywordsFound = keywords.every(k => nameLower.includes(k) || contentLower.includes(k))
+
+      if (allKeywordsFound) {
+        matchFound = true
+        
+        // Si on a du contenu, on génère un extrait autour du premier mot-clé trouvé
+        if (file.content) {
+          // On cherche la position du premier mot-clé qui matche dans le contenu pour centrer l'extrait
+          const firstMatchKeyword = keywords.find(k => contentLower.includes(k))
+          
+          if (firstMatchKeyword) {
+            const index = contentLower.indexOf(firstMatchKeyword)
+            const start = Math.max(0, index - 30)
+            const end = Math.min(file.content.length, index + 80) // Un peu plus large
+            let text = file.content.substring(start, end)
+
+            // Mise en évidence de TOUS les mots-clés
+            const regex = new RegExp(`(${keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi')
+            
+            text = text.replace(regex, (match) =>
+              `<span class="fw-bold text-primary bg-primary-subtle px-1 rounded border border-primary-subtle">${match}</span>`
+            )
+            snippet = `... ${text} ...`
+          }
+        }
       }
 
       if (matchFound) {
