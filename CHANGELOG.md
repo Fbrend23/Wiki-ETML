@@ -1,6 +1,12 @@
 # Changelog
 
-## v1.1 - 2025-12-18
+## v1.1.1 - 2025-12-18
+
+### Corrections
+
+- **Génération Audio** : Correction de l'erreur `string_too_long` pour les fichiers volumineux. Le script découpe désormais automatiquement le texte en segments pour contourner la limite de 4096 caractères de l'API OpenAI, sans interrompre la fluidité de la lecture.
+
+## v1.1.0 - 2025-12-18
 
 ### Ajouts
 
