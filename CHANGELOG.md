@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.2.0 - 2025-12-18
+
+### Améliorations
+
+- **Recherche** : Les extraits de recherche sont maintenant en "texte brut". Les liens Markdown et balises spéciales ne polluent plus l'affichage des résultats.
+- **Table des Matières (TOC)** : Ajout d'un sommaire flottant sur la droite (version Desktop) qui liste dynamiquement les sections du cours.
+- **Scroll Spy** : Le sommaire met en surbrillance automatiquement la section en cours de lecture et se déroule pour suivre votre progression.
+
+### Todo
+
+- **Export PDF** : Permettre aux étudiants d'imprimer/exporter une version propre du cours.
+- **Fil d'Ariane (Breadcrumbs)** : Améliorer la visibilité de la navigation (`Accueil > Catégorie > Page`).
+- **Quiz Générés par IA** : QCM interactif à la fin de chaque cours.
+
 ## v1.1.1 - 2025-12-18
 
 ### Corrections
