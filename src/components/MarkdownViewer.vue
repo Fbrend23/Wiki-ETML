@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, onMounted, computed, nextTick } from 'vue'
 import MarkdownIt from 'markdown-it'
+import MarkdownItAnchor from 'markdown-it-anchor'
 
 const props = defineProps({
     file: {
@@ -9,12 +10,17 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['navigate'])
+const emit = defineEmits(['navigate', 'toc-updated'])
 
+// Configuration de Markdown-it avec Anchor
+// Permet d'ajouter des ID automatiques aux titres pour le TOC
 const md = new MarkdownIt({
     html: true,
     breaks: true,
     linkify: true
+}).use(MarkdownItAnchor, {
+    permalink: false, // Pas de lien direct visible (géré par TOC)
+    slugify: (s) => s.trim().toLowerCase().replace(/[\s\W-]+/g, '-')
 })
 
 const html = ref('')
@@ -31,9 +37,30 @@ async function load() {
     try {
         const text = await fetch(props.file).then(res => res.text())
         html.value = md.render(text)
+
+        // 1. Extraction des en-têtes pour le TOC
+        // On attend que le DOM soit mis à jour
+        await nextTick()
+        extractHeaders()
     } catch {
         html.value = "<div class='alert alert-danger'>Erreur de chargement du contenu</div>"
     }
+}
+
+function extractHeaders() {
+    const article = document.querySelector('.markdown-body article')
+    if (!article) return
+
+    const headersElements = article.querySelectorAll('h2, h3')
+
+    const headers = Array.from(headersElements).map(el => ({
+        id: el.id,      // Généré par markdown-it-anchor
+        slug: el.id,    // Alias
+        text: el.textContent,
+        level: parseInt(el.tagName.substring(1))
+    }))
+
+    emit('toc-updated', headers)
 }
 
 // charge au montage
