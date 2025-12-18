@@ -434,13 +434,15 @@ function setupObserver() {
               </div>
             </div>
 
-            <!-- Back to Top Button (inside scrollable area) -->
-            <transition name="fade">
-              <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top shadow-lg" title="Retour en haut">
-                ↑
-              </button>
-            </transition>
           </div>
+
+          <!-- Back to Top Button -->
+          <transition name="fade">
+            <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top shadow-lg"
+              :class="{ 'with-toc': selected && currentHeaders.length > 0 }" title="Retour en haut">
+              ↑
+            </button>
+          </transition>
 
           <!-- TOC Sidebar (Static / Independent Scroll) - Desktop -->
           <div v-if="selected && currentHeaders.length > 0" class="d-none d-xl-block border-start"
@@ -561,8 +563,9 @@ aside::-webkit-scrollbar-thumb {
 
 .back-to-top {
   position: fixed;
-  bottom: 80px;
-  right: 20px;
+  bottom: 20px;
+  right: 80px;
+  /* Default: Left of GitHub button (20px + 50px + 10px gap) */
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -577,7 +580,14 @@ aside::-webkit-scrollbar-thumb {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   padding-bottom: 4px;
-  /* Visual adjustment for arrow */
+}
+
+/* On Desktop XL, if TOC is present, move button to left of TOC */
+@media (min-width: 1200px) {
+  .back-to-top.with-toc {
+    right: 270px;
+    /* 250px TOC + 20px gap */
+  }
 }
 
 .back-to-top:hover {
@@ -592,14 +602,6 @@ aside::-webkit-scrollbar-thumb {
     right: 15px;
     width: 45px;
     height: 45px;
-  }
-
-  .back-to-top {
-    bottom: 70px;
-    right: 15px;
-    width: 45px;
-    height: 45px;
-    font-size: 1.2rem;
   }
 
   .back-to-top {
