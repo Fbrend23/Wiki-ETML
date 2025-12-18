@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.1.2 - 2025-12-18
+
+### Améliorations
+
+- **Recherche Avancée** : La barre de recherche prend désormais en charge plusieurs mots-clés. Par exemple, une recherche "vue router" affichera uniquement les fichiers contenant à la fois "vue" et "router", avec une mise en évidence simultanée de tous les termes.
+
+### DevOps
+
+- **Déploiement Continu** : Mise à jour du workflow de déploiement pour se déclencher automatiquement lors de la publication d'une "Release" GitHub ou lors de toute modification de fichier Markdown dans le dossier `public/markdown`.
+
 ## v1.1.1 - 2025-12-18
 
 ### Corrections
