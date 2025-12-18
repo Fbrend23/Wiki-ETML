@@ -8,6 +8,8 @@ Ne lis pas ce bloc.
 
 _(Source : I183-TS2-ListeDesQuestions.pdf)_
 
+<a id="misc1"></a>
+
 ## **MISC1 — Risques des librairies tierces**
 
 Utiliser du code que l'on n'a pas écrit soi-même introduit plusieurs vecteurs d'attaque :
@@ -18,11 +20,14 @@ Utiliser du code que l'on n'a pas écrit soi-même introduit plusieurs vecteurs 
 4. **Dépendances transitives** : On installe une librairie A, qui installe B, qui installe C. Une faille dans C compromet A.
 
 **Bonnes pratiques :**
+
 - Utiliser `npm audit` ou **OWASP Dependency Check**.
 - Verrouiller les versions (`package-lock.json`).
 - Minimiser le nombre de dépendances.
 
 ---
+
+<a id="misc2"></a>
 
 ## **MISC2 — Chiffrement au repos / en transit**
 

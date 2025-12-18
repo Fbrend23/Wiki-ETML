@@ -8,12 +8,16 @@ Ne lis pas ce bloc.
 
 _(Source : I183-TS2-ListeDesQuestions.pdf)_
 
+<a id="ddos1"></a>
+
 ## **DDOS1 — Définition**
 
 Une attaque DDoS consiste à submerger un serveur par des milliers ou millions de requêtes simultanées.
 Objectif : rendre le service indisponible.
 
 ---
+
+<a id="ddos2"></a>
 
 ## **DDOS2 — Un TTL faible pour limiter l’impact**
 
@@ -26,6 +30,8 @@ Le **TTL (Time To Live)** DNS détermine la durée de cache d'une IP. Un TTL fai
 Ce n’est pas une protection complète, mais un outil parmi d’autres.
 
 ---
+
+<a id="ddos3"></a>
 
 ## **DDOS3 — Méthodes de mitigation**
 

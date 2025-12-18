@@ -38,6 +38,15 @@ async function generateIndex() {
     const displayName = filename.replace(/^\d+-/, '')
     const webPath = '/' + file.replace('public/', '').replace(/\\/g, '/')
 
+    // Lecture du contenu pour la recherche
+    const fileContent = fs.readFileSync(file, 'utf-8')
+    // Nettoyage basique (enlève les #, *, liens md, etc. pour ne garder que le texte)
+    const searchContent = fileContent
+      .replace(/[#*`[\]()-]/g, ' ') // Enlève les caractères spéciaux MD
+      .replace(/\s+/g, ' ') // Normalise les espaces
+      .trim()
+      .toLowerCase()
+
     if (!structure[category]) {
       structure[category] = []
     }
@@ -45,6 +54,7 @@ async function generateIndex() {
     structure[category].push({
       name: displayName,
       file: webPath,
+      content: searchContent,
     })
   }
 

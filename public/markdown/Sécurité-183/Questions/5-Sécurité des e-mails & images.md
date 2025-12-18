@@ -8,25 +8,29 @@ Ne lis pas ce bloc.
 
 _(Source : I183-TS2-ListeDesQuestions.pdf)_
 
+<a id="mail1"></a>
+
 ## **MAIL1 — Trois manières de protéger son adresse mail**
 
 1. **Obfuscation simple** (ex: `bob [at] mail.com`)
-   - *Force* : Très simple, lisible par l'humain.
-   - *Faiblesse* : Inefficace, les bots modernes comprennent cette syntaxe.
+   - _Force_ : Très simple, lisible par l'humain.
+   - _Faiblesse_ : Inefficace, les bots modernes comprennent cette syntaxe.
 
 2. **Encodage HTML** (Entités `&#64;`)
-   - *Force* : Invisible pour l'utilisateur, affichage normal.
-   - *Faiblesse* : Protection faible, les bots décodent le HTML.
+   - _Force_ : Invisible pour l'utilisateur, affichage normal.
+   - _Faiblesse_ : Protection faible, les bots décodent le HTML.
 
 3. **Encodage JavaScript**
-   - *Force* : L'adresse n'apparaît pas en clair dans le code source, nécessite un moteur JS.
-   - *Faiblesse* : Inaccessible si JS est désactivé, et les bots sophistiqués l'exécutent.
+   - _Force_ : L'adresse n'apparaît pas en clair dans le code source, nécessite un moteur JS.
+   - _Faiblesse_ : Inaccessible si JS est désactivé, et les bots sophistiqués l'exécutent.
 
 4. **Formulaire de contact**
-   - *Force* : L'adresse n'est jamais exposée, protection antispam (Captcha).
-   - *Faiblesse* : Plus complexe à mettre en place (backend nécessaire).
+   - _Force_ : L'adresse n'est jamais exposée, protection antispam (Captcha).
+   - _Faiblesse_ : Plus complexe à mettre en place (backend nécessaire).
 
 ---
+
+<a id="mail2"></a>
 
 ## **MAIL2 — Copyright dans une image**
 
@@ -38,6 +42,8 @@ Deux méthodes :
 Les professionnels combinent souvent les deux.
 
 ---
+
+<a id="mail4"></a>
 
 ## **MAIL4 — Qui paie ?**
 
