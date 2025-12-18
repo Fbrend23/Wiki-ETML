@@ -3,6 +3,7 @@ import path from 'node:path'
 import { glob } from 'glob'
 import 'dotenv/config'
 import process from 'node:process'
+import { Buffer } from 'node:buffer'
 
 const OPENAI_KEY = process.env.OPENAI_API_KEY
 const MARKDOWN_DIR = 'public/markdown'
@@ -22,6 +23,48 @@ Règles de réécriture :
 `
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+const MAX_CHARS = 4096
+
+function splitTextIntoChunks(text) {
+  if (text.length <= MAX_CHARS) return [text]
+
+  const chunks = []
+  let currentChunk = ''
+
+  // Split by paragraphs first
+  const paragraphs = text.split('\n')
+
+  for (const paragraph of paragraphs) {
+    if ((currentChunk + paragraph).length + 1 < MAX_CHARS) {
+      currentChunk += (currentChunk ? '\n' : '') + paragraph
+    } else {
+      // If adding the paragraph exceeds the limit
+      if (currentChunk) {
+        chunks.push(currentChunk)
+        currentChunk = ''
+      }
+
+      // If the paragraph itself is too long, split by sentences
+      if (paragraph.length > MAX_CHARS) {
+        const sentences = paragraph.match(/[^.!?]+[.!?]+(\s+|$)/g) || [paragraph]
+        for (const sentence of sentences) {
+          if ((currentChunk + sentence).length < MAX_CHARS) {
+            currentChunk += sentence
+          } else {
+            if (currentChunk) chunks.push(currentChunk)
+            currentChunk = sentence
+          }
+        }
+      } else {
+        currentChunk = paragraph
+      }
+    }
+  }
+
+  if (currentChunk) chunks.push(currentChunk)
+  return chunks
+}
 
 async function generateAudio() {
   if (!OPENAI_KEY) {
@@ -94,28 +137,40 @@ async function generateAudio() {
       const textToRead = chatData.choices[0].message.content
       console.log(`2/2 Génération audio (TTS)...`)
 
-      const audioResponse = await fetch('https://api.openai.com/v1/audio/speech', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${OPENAI_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'tts-1',
-          voice: 'alloy',
-          input: textToRead,
-        }),
-      })
+      const textChunks = splitTextIntoChunks(textToRead)
+      const audioBuffers = []
 
-      if (!audioResponse.ok) {
-        throw new Error(`Erreur Audio API: ${audioResponse.status} - ${await audioResponse.text()}`)
+      for (let i = 0; i < textChunks.length; i++) {
+        const chunk = textChunks[i]
+        console.log(`   - Chunk ${i + 1}/${textChunks.length} (${chunk.length} chars)`)
+
+        const audioResponse = await fetch('https://api.openai.com/v1/audio/speech', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${OPENAI_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'tts-1',
+            voice: 'alloy',
+            input: chunk,
+          }),
+        })
+
+        if (!audioResponse.ok) {
+          throw new Error(
+            `Erreur Audio API (Chunk ${i + 1}): ${audioResponse.status} - ${await audioResponse.text()}`,
+          )
+        }
+
+        const arrayBuffer = await audioResponse.arrayBuffer()
+
+        audioBuffers.push(Buffer.from(arrayBuffer))
       }
 
-      const arrayBuffer = await audioResponse.arrayBuffer()
-      // eslint-disable-next-line no-undef
-      const buffer = Buffer.from(arrayBuffer)
+      const finalBuffer = Buffer.concat(audioBuffers)
 
-      fs.writeFileSync(audioPath, buffer)
+      fs.writeFileSync(audioPath, finalBuffer)
       console.log(`Succès ! Audio enregistré.`)
 
       await sleep(1000)
