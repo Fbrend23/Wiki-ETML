@@ -86,7 +86,6 @@ Très simple à exploiter, extrêmement courant.
 OWASP est une organisation mondiale dédiée à la sécurité :
 Elle produit :
 
-- outils (ZAP),
 - guides pratiques,
 - le célèbre **OWASP Top 10**,
 - une base complète de bonnes pratiques.
