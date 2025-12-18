@@ -8,6 +8,8 @@ Ne lis pas ce bloc.
 
 _(Source : I183-TS2-ListeDesQuestions.pdf)_
 
+<a id="ddos1"></a>
+
 ## **DDOS1 — Définition**
 
 Une attaque DDoS consiste à submerger un serveur par des milliers ou millions de requêtes simultanées.
@@ -15,17 +17,21 @@ Objectif : rendre le service indisponible.
 
 ---
 
+<a id="ddos2"></a>
+
 ## **DDOS2 — Un TTL faible pour limiter l’impact**
 
-Un TTL faible permet :
+Le **TTL (Time To Live)** DNS détermine la durée de cache d'une IP. Un TTL faible (ex: 60s) permet :
 
-- de modifier rapidement l'adresse IP d’un service,
-- de rediriger vers un système de mitigation,
-- de répartir les charges.
+- de **changer rapidement l'adresse IP** du serveur si l'actuelle est attaquée (Null routing),
+- de rediriger le trafic vers un système de mitigation (Scrubbing center) sans attendre des heures,
+- de faciliter le **DNS Round Robin** pour répartir la charge sur plusieurs serveurs.
 
 Ce n’est pas une protection complète, mais un outil parmi d’autres.
 
 ---
+
+<a id="ddos3"></a>
 
 ## **DDOS3 — Méthodes de mitigation**
 

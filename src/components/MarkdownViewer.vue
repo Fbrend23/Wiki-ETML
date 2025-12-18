@@ -9,6 +9,8 @@ const props = defineProps({
     }
 })
 
+const emit = defineEmits(['navigate'])
+
 const md = new MarkdownIt({
     html: true,
     breaks: true,
@@ -39,6 +41,21 @@ onMounted(load)
 
 // recharge quand le fichier change
 watch(() => props.file, load)
+
+function handleLinkClick(event) {
+    const link = event.target.closest('a')
+    if (!link) return
+
+    const href = link.getAttribute('href')
+    if (!href) return
+
+    // Intercepte les liens internes (commençant par ./, /, ou #)
+    // On laisse les liens externes (http://, https://) se comporter normalement
+    if (href.startsWith('./') || href.startsWith('/') || href.startsWith('#')) {
+        event.preventDefault()
+        emit('navigate', href)
+    }
+}
 </script>
 
 <template>
@@ -56,7 +73,7 @@ watch(() => props.file, load)
             </div>
         </div>
 
-        <article v-html="html"></article>
+        <article v-html="html" @click="handleLinkClick"></article>
     </div>
 </template>
 

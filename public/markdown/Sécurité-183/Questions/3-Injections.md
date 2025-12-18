@@ -8,6 +8,8 @@ Ne lis pas ce bloc.
 
 _(Source : I183-TS2-ListeDesQuestions.pdf)_
 
+<a id="isql1"></a>
+
 ## **ISQL1 — MongoDB vulnérable aux injections ?**
 
 Oui, et ces injections peuvent :
@@ -15,15 +17,19 @@ Oui, et ces injections peuvent :
 - contourner une authentification,
 - modifier les filtres de recherche,
 - exploiter les opérateurs `$ne`, `$gt`, `$regex`, `$or`.
+
 ```json
 username: "admin"
 password: { "$ne": null }
 ```
->Trouve l'utilisateur 'admin' dont le mot de passe N'EST PAS nul.
+
+> Trouve l'utilisateur 'admin' dont le mot de passe N'EST PAS nul.
 
 Dans des systèmes mal codés, une simple requête JSON peut retourner **tous les utilisateurs**.
 
 ---
+
+<a id="isql2"></a>
 
 ## **ISQL2 — `' OR '1'='1`**
 
@@ -40,6 +46,8 @@ Aujourd’hui, toute API doit utiliser :
 
 ---
 
+<a id="isql3"></a>
+
 ## **ISQL3 — Modification de base par injection**
 
 Si aucune protection n’est appliquée, une injection peut non seulement lire les données, mais aussi :
@@ -55,6 +63,8 @@ C’est la raison pour laquelle :
 
 ---
 
+<a id="isql4"></a>
+
 ## **ISQL4 — Masquer les erreurs SQL**
 
 Une bonne API :
@@ -62,6 +72,12 @@ Une bonne API :
 - masque les messages techniques,
 - logue l’erreur côté serveur,
 - renvoie un message simple comme _"Erreur interne"_.
+
+**Configuration recommandée :**
+
+- **Node.js** : Définir `NODE_ENV=production` pour désactiver les stacktraces détaillées.
+- **MySQL** : Configurer le driver avec `debug: false`.
+- **Code** : Utiliser des blocs `try/catch` et ne jamais renvoyer l'objet `error` brut au client.
 
 Exposer une erreur SQL revient à dévoiler :
 

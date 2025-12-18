@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import MarkdownViewer from './components/MarkdownViewer.vue'
 import { BApp } from 'bootstrap-vue-next'
 // Import du logo
@@ -7,6 +7,58 @@ import logoSrc from './assets/livres.png'
 
 const categories = ref({})
 const selected = ref(null)
+const mainContent = ref(null)
+const showScrollTop = ref(false)
+
+// Recherche
+const searchQuery = ref('')
+const searchResults = computed(() => {
+  if (!searchQuery.value || searchQuery.value.length < 2) return []
+
+  const query = searchQuery.value.toLowerCase()
+  const results = []
+
+  for (const [category, files] of Object.entries(categories.value)) {
+    for (const file of files) {
+      let snippet = ''
+      let matchFound = false
+
+      // 1. Recherche dans le NOM
+      if (file.name.toLowerCase().includes(query)) {
+        matchFound = true
+      }
+      // 2. Recherche dans le CONTENU
+      else if (file.content && file.content.includes(query)) {
+        matchFound = true
+        // Extraction de l'extrait
+        const index = file.content.indexOf(query)
+        const start = Math.max(0, index - 30)
+        const end = Math.min(file.content.length, index + query.length + 40)
+        let text = file.content.substring(start, end)
+
+        // Mise en évidence
+        // On utilise un style plus visible : Gras + Couleur Primaire + Fond léger
+        text = text.replace(new RegExp(query, 'gi'), (match) =>
+          `<span class="fw-bold text-primary bg-primary-subtle px-1 rounded border border-primary-subtle">${match}</span>`
+        )
+        snippet = `... ${text} ...`
+      }
+
+      if (matchFound) {
+        // Enlève le chemin complet de la catégorie pour l'affichage (optionnel)
+        const displayCategory = category.split(' > ').pop()
+        results.push({ ...file, category: displayCategory, snippet })
+      }
+    }
+  }
+  return results
+})
+
+function selectSearchResult(file) {
+  selected.value = file.file
+  searchQuery.value = ''
+  mobileMenu.value = false
+}
 
 // Menus
 const mobileMenu = ref(false)
@@ -58,6 +110,21 @@ const groupedCategories = computed(() => {
   return sortedGroups
 })
 
+function handleScroll() {
+  if (!mainContent.value) return
+  showScrollTop.value = mainContent.value.scrollTop > 300
+}
+
+function scrollToTop() {
+  mainContent.value?.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+watch(selected, () => {
+  if (mainContent.value) {
+    mainContent.value.scrollTo({ top: 0, behavior: 'instant' })
+  }
+})
+
 onMounted(async () => {
   dark.value = localStorage.getItem('theme') !== 'light'
   document.documentElement.setAttribute('data-bs-theme', dark.value ? 'dark' : 'light')
@@ -77,6 +144,41 @@ function toggleTheme() {
   const theme = dark.value ? 'dark' : 'light'
   document.documentElement.setAttribute('data-bs-theme', theme)
   localStorage.setItem('theme', theme)
+}
+
+function handleNavigate(href) {
+  // href format: "./filename.md" OR "./filename.md#anchor" OR "#anchor"
+
+  const [path, hash] = href.split('#')
+
+  // 1. Changement de fichier
+  if (path) {
+    // Résolution de chemin relatif simple pour le cas "./"
+    // On suppose que tous les liens sont relatifs au dossier courant du fichier affiché
+    if (selected.value) {
+      const currentDir = selected.value.substring(0, selected.value.lastIndexOf('/'))
+      // On enlève le ./ du début s'il est présent
+      const cleanPath = path.startsWith('./') ? path.substring(2) : path
+
+      // On reconstruit le chemin complet
+      // decodeURIComponent pour gérer les espaces et accents (%20, %C3...)
+      const targetFile = decodeURIComponent(`${currentDir}/${cleanPath}`)
+      selected.value = targetFile
+    }
+  }
+
+  // 2. Gestion de l'ancre (scroll)
+  if (hash) {
+    // On attend que Vue ait mis à jour le DOM (si changement de page)
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const el = document.getElementById(hash)
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 150) // Délai pour laisser le temps au rendu Markdown
+    })
+  }
 }
 </script>
 
@@ -116,7 +218,31 @@ function toggleTheme() {
 
         <div class="position-absolute start-50 translate-middle-x d-flex align-items-center gap-2">
           <img :src="logoSrc" alt="Logo" width="32" height="32">
-          <h1 class="mb-0 h5 fw-bold">ETML Wiki</h1>
+          <h1 class="mb-0 h5 fw-bold d-none d-lg-block">ETML Wiki</h1>
+        </div>
+
+        <div class="position-relative ms-auto me-3 d-none d-sm-block" style="width: 400px; transition: width 0.3s;">
+          <input type="search" class="form-control form-control-sm" placeholder="Rechercher (Ctrl+K)..."
+            v-model="searchQuery" ref="searchInput" @keydown.esc="searchQuery = ''">
+
+          <div v-if="searchResults.length > 0"
+            class="search-dropdown shadow-sm rounded mt-1 bg-body border position-absolute w-100 overflow-hidden"
+            style="z-index: 1060;">
+            <div class="list-group list-group-flush">
+              <button v-for="res in searchResults" :key="res.file" @click="selectSearchResult(res)"
+                class="list-group-item list-group-item-action text-start py-2 px-3 small">
+                <div class="fw-bold text-truncate">{{ res.name }}</div>
+                <div class="text-muted" style="font-size: 0.75rem;">{{ res.category }}</div>
+                <div v-if="res.snippet" class="small text-body-secondary fst-italic mt-1" style="font-size: 0.8rem;"
+                  v-html="res.snippet"></div>
+              </button>
+            </div>
+          </div>
+          <div v-else-if="searchQuery.length >= 2 && searchResults.length === 0"
+            class="search-dropdown shadow-sm rounded mt-1 bg-body border position-absolute w-100 p-2 text-center text-muted small"
+            style="z-index: 1060;">
+            Aucun résultat
+          </div>
         </div>
 
         <button @click="toggleTheme" class="btn btn-link text-decoration-none fs-5">
@@ -133,6 +259,31 @@ function toggleTheme() {
               <span class="fw-bold">Menu</span>
               <button @click="mobileMenu = false" class="btn-close"></button>
             </div>
+
+            <!-- Mobile Search -->
+            <div class="p-3 bg-body border-bottom position-relative">
+              <input type="search" class="form-control" placeholder="Rechercher..." v-model="searchQuery">
+
+              <div v-if="searchResults.length > 0"
+                class="search-dropdown shadow-sm rounded mt-1 bg-body border position-absolute w-100 overflow-hidden"
+                style="z-index: 1060; left: 0; width: 100% !important;">
+                <div class="list-group list-group-flush">
+                  <button v-for="res in searchResults" :key="res.file" @click="selectSearchResult(res)"
+                    class="list-group-item list-group-item-action text-start py-2 px-3 small">
+                    <div class="fw-bold text-truncate">{{ res.name }}</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">{{ res.category }}</div>
+                    <div v-if="res.snippet" class="small text-body-secondary fst-italic mt-1" style="font-size: 0.8rem;"
+                      v-html="res.snippet"></div>
+                  </button>
+                </div>
+              </div>
+              <div v-else-if="searchQuery.length >= 2 && searchResults.length === 0"
+                class="search-dropdown shadow-sm rounded mt-1 bg-body border position-absolute text-center p-2 text-muted small"
+                style="z-index: 1060; left: 0; width: 100% !important;">
+                Aucun résultat
+              </div>
+            </div>
+
             <div class="p-3 overflow-y-auto flex-grow-1">
               <div v-for="(subCats, mainCat) in groupedCategories" :key="mainCat" class="mb-4">
                 <div class="d-flex align-items-center gap-2 mb-2 text-primary">
@@ -192,9 +343,10 @@ function toggleTheme() {
           </div>
         </aside>
 
-        <main class="flex-grow-1 p-0 overflow-y-auto bg-body position-relative">
+        <main class="flex-grow-1 p-0 overflow-y-auto bg-body position-relative" ref="mainContent"
+          @scroll="handleScroll">
           <div class="container-md py-5" style="max-width: 900px;">
-            <MarkdownViewer v-if="selected" :file="selected" />
+            <MarkdownViewer v-if="selected" :file="selected" @navigate="handleNavigate" />
 
             <div v-else class="text-center mt-5 pt-5 text-muted">
               <div class="fs-1 mb-3">📚</div>
@@ -202,6 +354,13 @@ function toggleTheme() {
               <p>Sélectionnez un cours dans le menu pour commencer.</p>
             </div>
           </div>
+
+          <!-- Back to Top Button -->
+          <transition name="fade">
+            <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top shadow-lg" title="Retour en haut">
+              ↑
+            </button>
+          </transition>
         </main>
       </div>
     </div>
@@ -314,6 +473,32 @@ aside::-webkit-scrollbar-thumb {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
+.back-to-top {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--bs-primary);
+  color: white;
+  font-size: 1.5rem;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding-bottom: 4px;
+  /* Visual adjustment for arrow */
+}
+
+.back-to-top:hover {
+  transform: translateY(-5px);
+  background-color: var(--bs-link-hover-color);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+}
 
 @media (max-width: 768px) {
   .github-float {
@@ -322,5 +507,26 @@ aside::-webkit-scrollbar-thumb {
     width: 45px;
     height: 45px;
   }
+
+  .back-to-top {
+    bottom: 70px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+
+  .back-to-top {
+    bottom: 70px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+}
+
+.search-dropdown {
+  max-height: 300px;
+  overflow-y: auto;
 }
 </style>
