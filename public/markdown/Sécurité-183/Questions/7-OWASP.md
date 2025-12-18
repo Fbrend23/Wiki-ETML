@@ -90,6 +90,9 @@ Elle produit :
 - guides pratiques,
 - le célèbre **OWASP Top 10**,
 - une base complète de bonnes pratiques.
+- **OWASP ZAP** (Scanner de vulnérabilités).
+- **OWASP Juice Shop** (Application vulnérable pour l'entraînement).
+- **Web Security Testing Guide (WSTG)**.
 
 Référence essentielle pour tout développeur web.
 

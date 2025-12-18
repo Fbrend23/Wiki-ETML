@@ -17,11 +17,11 @@ Objectif : rendre le service indisponible.
 
 ## **DDOS2 — Un TTL faible pour limiter l’impact**
 
-Un TTL faible permet :
+Le **TTL (Time To Live)** DNS détermine la durée de cache d'une IP. Un TTL faible (ex: 60s) permet :
 
-- de modifier rapidement l'adresse IP d’un service,
-- de rediriger vers un système de mitigation,
-- de répartir les charges.
+- de **changer rapidement l'adresse IP** du serveur si l'actuelle est attaquée (Null routing),
+- de rediriger le trafic vers un système de mitigation (Scrubbing center) sans attendre des heures,
+- de faciliter le **DNS Round Robin** pour répartir la charge sur plusieurs serveurs.
 
 Ce n’est pas une protection complète, mais un outil parmi d’autres.
 

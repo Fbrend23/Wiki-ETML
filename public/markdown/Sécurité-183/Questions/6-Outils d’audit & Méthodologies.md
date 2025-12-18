@@ -25,6 +25,8 @@ C'est un framework permettant :
 - automatisation des attaques.
 
 Outil puissant : utilisé uniquement en environnement autorisé.
+**Exemple concret** :
+Utiliser le module `exploit/windows/smb/ms17_010_eternalblue` pour prendre le contrôle d'un serveur Windows non patché.
 
 ---
 
@@ -51,6 +53,13 @@ Le testeur ne connaît rien de l’application :
 
 Il simule le point de vue d’un pirate réel.
 
-Très utile, mais souvent insuffisant car certaines failles nécessitent une analyse interne (**white box**).
+**Avantages** :
+- Conditions réalistes (simulation d'attaque externe).
+- Indépendance vis-à-vis de la documentation (souvent fausse).
+
+**Inconvénients** :
+- Couverture de test incomplète (on ne trouve pas tout).
+- Plus lent (tâtonnement).
+- Peut rater des failles évidentes dans le code source (**White Box** préférable pour l'exhaustivité).
 
 ---

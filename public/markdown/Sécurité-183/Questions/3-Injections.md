@@ -63,6 +63,11 @@ Une bonne API :
 - logue l’erreur côté serveur,
 - renvoie un message simple comme _"Erreur interne"_.
 
+**Configuration recommandée :**
+- **Node.js** : Définir `NODE_ENV=production` pour désactiver les stacktraces détaillées.
+- **MySQL** : Configurer le driver avec `debug: false`.
+- **Code** : Utiliser des blocs `try/catch` et ne jamais renvoyer l'objet `error` brut au client.
+
 Exposer une erreur SQL revient à dévoiler :
 
 - le type de base,
