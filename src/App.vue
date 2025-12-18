@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import MarkdownViewer from './components/MarkdownViewer.vue'
+import TableOfContents from './components/TableOfContents.vue'
 import { BApp } from 'bootstrap-vue-next'
 // Import du logo
 import logoSrc from './assets/livres.png'
@@ -9,6 +10,8 @@ const categories = ref({})
 const selected = ref(null)
 const mainContent = ref(null)
 const showScrollTop = ref(false)
+const currentHeaders = ref([]) // Pour le TOC
+const activeHeaderId = ref('') // Pour le scroll spy (bonus)
 
 // Recherche
 const searchQuery = ref('')
@@ -54,6 +57,7 @@ const searchResults = computed(() => {
   return results
 })
 
+// Navigation interne
 function selectSearchResult(file) {
   selected.value = file.file
   searchQuery.value = ''
@@ -113,6 +117,15 @@ const groupedCategories = computed(() => {
 function handleScroll() {
   if (!mainContent.value) return
   showScrollTop.value = mainContent.value.scrollTop > 300
+
+  // Détection du bas de page pour le TOC
+  const { scrollTop, clientHeight, scrollHeight } = mainContent.value
+  // Si on est à 50px du bas ou moins
+  if (scrollTop + clientHeight >= scrollHeight - 50) {
+    if (currentHeaders.value.length > 0) {
+      activeHeaderId.value = currentHeaders.value[currentHeaders.value.length - 1].slug
+    }
+  }
 }
 
 function scrollToTop() {
@@ -120,6 +133,9 @@ function scrollToTop() {
 }
 
 watch(selected, () => {
+  // Reset TOC quand on change de fichier
+  currentHeaders.value = []
+
   if (mainContent.value) {
     mainContent.value.scrollTo({ top: 0, behavior: 'instant' })
   }
@@ -180,6 +196,57 @@ function handleNavigate(href) {
     })
   }
 }
+
+function updateTOC(headers) {
+  currentHeaders.value = headers
+
+  // Wait for DOM update then setup observer
+  setTimeout(setupObserver, 100)
+}
+
+// Scroll Spy Logic
+let observer = null
+const visibleHeaders = ref(new Set())
+
+function setupObserver() {
+  if (observer) {
+    observer.disconnect()
+  }
+
+  // Reset visibility set on new content
+  visibleHeaders.value.clear()
+
+  const options = {
+    root: mainContent.value,
+    // -80px (header) to -30% (lower down)
+    // Larger window prevents skipping short sections
+    rootMargin: '-80px 0px -30% 0px',
+    threshold: 0
+  }
+
+  observer = new IntersectionObserver((entries) => {
+    // 1. Update set of visible headers
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        visibleHeaders.value.add(entry.target.id)
+      } else {
+        visibleHeaders.value.delete(entry.target.id)
+      }
+    })
+
+    // 2. Pick the FIRST matching header from our ordered list
+    // This ensures that if Header A and Header B are both visible, A (topmost) wins.
+    const firstVisible = currentHeaders.value.find(h => visibleHeaders.value.has(h.slug))
+    if (firstVisible) {
+      activeHeaderId.value = firstVisible.slug
+    }
+  }, options)
+
+  currentHeaders.value.forEach(h => {
+    const el = document.getElementById(h.slug)
+    if (el) observer.observe(el)
+  })
+}
 </script>
 
 <template>
@@ -199,13 +266,24 @@ function handleNavigate(href) {
           <button class="navbar-toggler border-0" type="button" @click="mobileMenu = true">
             <span class="navbar-toggler-icon"></span>
           </button>
+
           <div class="d-flex align-items-center gap-2 mx-auto">
-            <img :src="logoSrc" alt="Logo" width="30" height="30">
-            <h1 class="mb-0 h5 fw-bold">Wiki ETML</h1>
+            <div v-if="!selected" class="fw-bold">Wiki ETML</div>
+            <div v-else class="text-truncate fw-bold small" style="max-width: 150px;">
+              {{
+                Object.values(categories)
+                  .flat()
+                  .find(f => f.file === selected)
+                  ?.name || 'Cours'
+              }}
+            </div>
           </div>
-          <button @click="toggleTheme" class="btn btn-link text-decoration-none fs-5 p-0">
-            {{ dark ? '🌙' : '☀️' }}
-          </button>
+
+          <div class="d-flex gap-2">
+            <button @click="toggleTheme" class="btn btn-link text-decoration-none fs-5 p-0">
+              {{ dark ? '🌙' : '☀️' }}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -250,6 +328,7 @@ function handleNavigate(href) {
         </button>
       </nav>
 
+      <!-- Mobile Menu (Left) -->
       <transition name="fade">
         <aside v-if="mobileMenu" class="position-fixed top-0 start-0 w-100 h-100 d-md-none" style="z-index: 1040;">
           <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50" @click="mobileMenu = false"></div>
@@ -343,24 +422,33 @@ function handleNavigate(href) {
           </div>
         </aside>
 
-        <main class="flex-grow-1 p-0 overflow-y-auto bg-body position-relative" ref="mainContent"
-          @scroll="handleScroll">
-          <div class="container-md py-5" style="max-width: 900px;">
-            <MarkdownViewer v-if="selected" :file="selected" @navigate="handleNavigate" />
+        <main class="flex-grow-1 p-0 overflow-hidden bg-body position-relative d-flex">
+          <div class="flex-grow-1 overflow-y-auto" ref="mainContent" @scroll="handleScroll">
+            <div class="container-md py-5" style="max-width: 900px;">
+              <MarkdownViewer v-if="selected" :file="selected" @navigate="handleNavigate" @toc-updated="updateTOC" />
 
-            <div v-else class="text-center mt-5 pt-5 text-muted">
-              <div class="fs-1 mb-3">📚</div>
-              <h2 class="h4">Bienvenue sur le Wiki ETML</h2>
-              <p>Sélectionnez un cours dans le menu pour commencer.</p>
+              <div v-else class="text-center mt-5 pt-5 text-muted">
+                <div class="fs-1 mb-3">📚</div>
+                <h2 class="h4">Bienvenue sur le Wiki ETML</h2>
+                <p>Sélectionnez un cours dans le menu pour commencer.</p>
+              </div>
             </div>
+
           </div>
 
           <!-- Back to Top Button -->
           <transition name="fade">
-            <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top shadow-lg" title="Retour en haut">
+            <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top shadow-lg"
+              :class="{ 'with-toc': selected && currentHeaders.length > 0 }" title="Retour en haut">
               ↑
             </button>
           </transition>
+
+          <!-- TOC Sidebar (Static / Independent Scroll) - Desktop -->
+          <div v-if="selected && currentHeaders.length > 0" class="d-none d-xl-block border-start"
+            style="width: 250px; min-width: 250px;">
+            <TableOfContents :headers="currentHeaders" :active-id="activeHeaderId" />
+          </div>
         </main>
       </div>
     </div>
@@ -475,8 +563,9 @@ aside::-webkit-scrollbar-thumb {
 
 .back-to-top {
   position: fixed;
-  bottom: 80px;
-  right: 20px;
+  bottom: 20px;
+  right: 80px;
+  /* Default: Left of GitHub button (20px + 50px + 10px gap) */
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -491,7 +580,14 @@ aside::-webkit-scrollbar-thumb {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   padding-bottom: 4px;
-  /* Visual adjustment for arrow */
+}
+
+/* On Desktop XL, if TOC is present, move button to left of TOC */
+@media (min-width: 1200px) {
+  .back-to-top.with-toc {
+    right: 270px;
+    /* 250px TOC + 20px gap */
+  }
 }
 
 .back-to-top:hover {
@@ -506,14 +602,6 @@ aside::-webkit-scrollbar-thumb {
     right: 15px;
     width: 45px;
     height: 45px;
-  }
-
-  .back-to-top {
-    bottom: 70px;
-    right: 15px;
-    width: 45px;
-    height: 45px;
-    font-size: 1.2rem;
   }
 
   .back-to-top {
