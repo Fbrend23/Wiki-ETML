@@ -13,8 +13,9 @@ _(Source : I183-TS2-ListeDesQuestions.pdf)_
 ## **MAIL1 — Trois manières de protéger son adresse mail**
 
 1. **Obfuscation simple** (ex: `bob [at] mail.com`)
-   - _Force_ : Très simple, lisible par l'humain.
-   - _Faiblesse_ : Inefficace, les bots modernes comprennent cette syntaxe.
+
+- _Force_ : Très simple, lisible par l'humain.
+- _Faiblesse_ : Inefficace, les bots modernes comprennent cette syntaxe.
 
 2. **Encodage HTML** (Entités `&#64;`)
    - _Force_ : Invisible pour l'utilisateur, affichage normal.
