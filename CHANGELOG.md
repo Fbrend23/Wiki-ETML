@@ -8,10 +8,10 @@
 - **Table des Matières (TOC)** : Ajout d'un sommaire flottant sur la droite (version Desktop) qui liste dynamiquement les sections du cours.
 - **Scroll Spy** : Le sommaire met en surbrillance automatiquement la section en cours de lecture et se déroule pour suivre votre progression.
 - **Export PDF** : Ajout d'un bouton pour imprimer ou enregistrer le cours.
+- **Fil d'Ariane (Breadcrumbs)** : Améliorer la visibilité de la navigation (`Accueil > Catégorie > Page`).
 
 ### Todo
 
-- **Fil d'Ariane (Breadcrumbs)** : Améliorer la visibilité de la navigation (`Accueil > Catégorie > Page`).
 - **Quiz Générés par IA** : QCM interactif à la fin de chaque cours.
 
 ## v1.1.1 - 2025-12-18
