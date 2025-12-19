@@ -114,6 +114,19 @@ const groupedCategories = computed(() => {
   return sortedGroups
 })
 
+const breadcrumbs = computed(() => {
+  if (!selected.value) return []
+
+  // Trouver la catégorie qui contient le fichier sélectionné
+  for (const [category, files] of Object.entries(categories.value)) {
+    if (files.find(f => f.file === selected.value)) {
+      // "Sécurité > Web" -> ["Sécurité", "Web"]
+      return category.split(' > ')
+    }
+  }
+  return []
+})
+
 function handleScroll() {
   if (!mainContent.value) return
   showScrollTop.value = mainContent.value.scrollTop > 300
@@ -441,6 +454,20 @@ function setupObserver() {
             </div>
 
             <div id="print-area" class="container-md py-5" style="max-width: 900px;">
+              <!-- Fil d'Ariane -->
+              <nav v-if="selected" aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb mb-0">
+                  <li class="breadcrumb-item">
+                    <a href="#" @click.prevent="selected = null" class="text-decoration-none text-muted">Acuueil</a>
+                  </li>
+                  <!-- Catégories dynamiques -->
+                  <li v-for="(item, index) in breadcrumbs" :key="index" class="breadcrumb-item text-muted"
+                    aria-current="page">
+                    {{ item }}
+                  </li>
+                </ol>
+              </nav>
+
               <MarkdownViewer v-if="selected" :file="selected" @navigate="handleNavigate" @toc-updated="updateTOC" />
 
               <div v-else class="text-center mt-5 pt-5 text-muted">
