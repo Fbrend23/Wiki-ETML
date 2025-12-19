@@ -88,7 +88,7 @@ function handleLinkClick(event) {
 <template>
     <div class="markdown-body position-relative">
 
-        <div v-if="audioSrc" class="card border-0 shadow-sm mb-4 bg-body-tertiary">
+        <div v-if="audioSrc" class="audio-widget card border-0 shadow-sm mb-4 bg-body-tertiary">
             <div class="card-body d-flex align-items-center gap-3 py-2">
                 <div class="fs-2">🎧</div>
                 <div class="flex-grow-1">

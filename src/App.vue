@@ -162,6 +162,10 @@ function toggleTheme() {
   localStorage.setItem('theme', theme)
 }
 
+function printPage() {
+  window.print()
+}
+
 function handleNavigate(href) {
   // href format: "./filename.md" OR "./filename.md#anchor" OR "#anchor"
 
@@ -251,7 +255,8 @@ function setupObserver() {
 
 <template>
   <BApp>
-    <div class="d-flex flex-column vh-100 bg-body">
+    <!-- SCREEN VIEW ONLY (HIDDEN ON PRINT) -->
+    <div class="layout-wrapper d-flex flex-column vh-100 bg-body d-print-none">
       <a href="https://github.com/Fbrend23/Wiki-ETML" target="_blank"
         class="github-float d-flex align-items-center justify-content-center text-decoration-none shadow-lg"
         title="Voir le code source">
@@ -391,7 +396,7 @@ function setupObserver() {
         </aside>
       </transition>
 
-      <div class="d-flex flex-grow-1 overflow-hidden">
+      <div class="layout-inner d-flex flex-grow-1 overflow-hidden">
 
         <aside v-if="desktopMenu" class="d-none d-md-flex flex-column border-end bg-body-tertiary overflow-y-auto"
           style="width: 320px; transition: width 0.3s;">
@@ -423,8 +428,19 @@ function setupObserver() {
         </aside>
 
         <main class="flex-grow-1 p-0 overflow-hidden bg-body position-relative d-flex">
-          <div class="flex-grow-1 overflow-y-auto" ref="mainContent" @scroll="handleScroll">
-            <div class="container-md py-5" style="max-width: 900px;">
+          <div class="content-scroller flex-grow-1 overflow-y-auto" ref="mainContent" @scroll="handleScroll">
+            <!-- Print Button (Sticky top-right of main content) -->
+            <!-- Height 0 wrapper to avoid pushing content, positioned sticky to stay visible -->
+            <div v-if="selected" class="position-sticky top-0 end-0 p-3 d-flex justify-content-end"
+              style="z-index: 100; pointer-events: none; height: 0; overflow: visible;">
+              <button @click="printPage"
+                class="btn btn-light border shadow-sm rounded-circle d-flex align-items-center justify-content-center print-btn"
+                style="width: 45px; height: 45px; pointer-events: auto;" title="Imprimer / PDF">
+                🖨️
+              </button>
+            </div>
+
+            <div id="print-area" class="container-md py-5" style="max-width: 900px;">
               <MarkdownViewer v-if="selected" :file="selected" @navigate="handleNavigate" @toc-updated="updateTOC" />
 
               <div v-else class="text-center mt-5 pt-5 text-muted">
@@ -447,9 +463,20 @@ function setupObserver() {
           <!-- TOC Sidebar (Static / Independent Scroll) - Desktop -->
           <div v-if="selected && currentHeaders.length > 0" class="d-none d-xl-block border-start"
             style="width: 250px; min-width: 250px;">
-            <TableOfContents :headers="currentHeaders" :active-id="activeHeaderId" />
+            <TableOfContents :headers="currentHeaders" :active-id="activeHeaderId"
+              @toc-click="handleNavigate('#' + $event)" />
           </div>
         </main>
+      </div>
+    </div>
+
+    <!-- PRINT VIEW ONLY (VISIBLE ONLY ON PRINT) -->
+    <!-- This structure escapes the flexbox/overflow labyrinth entirely -->
+    <div class="d-none d-print-block print-view">
+      <div class="container-fluid p-5">
+        <!-- Re-use the Markdown Viewer with a key to ensure fresh render if needed, though mostly static -->
+        <MarkdownViewer v-if="selected" :file="selected" :key="'print-' + selected" @navigate="() => { }"
+          @toc-updated="() => { }" />
       </div>
     </div>
   </BApp>
@@ -616,5 +643,52 @@ aside::-webkit-scrollbar-thumb {
 .search-dropdown {
   max-height: 300px;
   overflow-y: auto;
+}
+
+@media print {
+
+  /* 1. Ensure Global Resets */
+  @page {
+    margin: 2cm;
+    size: auto;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* 2. Audio Widget hiding (class based just in case) */
+  .audio-widget {
+    display: none !important;
+  }
+
+  /* 3. Helper for Print View */
+  /* The d-print-block class handles the display, but we ensure dimensions */
+  .print-view {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .print-view .markdown-body article {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Prevent page breaks inside sensitive elements */
+  h1,
+  h2,
+  h3,
+  img,
+  pre,
+  code {
+    page-break-inside: avoid;
+  }
 }
 </style>
