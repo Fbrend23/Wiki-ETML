@@ -271,7 +271,7 @@ function setupObserver() {
     <!-- SCREEN VIEW ONLY (HIDDEN ON PRINT) -->
     <div class="layout-wrapper d-flex flex-column vh-100 bg-body d-print-none">
       <a href="https://github.com/Fbrend23/Wiki-ETML" target="_blank"
-        class="github-float d-flex align-items-center justify-content-center text-decoration-none shadow-lg"
+        class="github-float d-flex align-items-center justify-content-center text-decoration-none"
         title="Voir le code source">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github"
           viewBox="0 0 16 16">
@@ -481,7 +481,7 @@ function setupObserver() {
 
           <!-- Back to Top Button -->
           <transition name="fade">
-            <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top shadow-lg"
+            <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top"
               :class="{ 'with-toc': selected && currentHeaders.length > 0 }" title="Retour en haut">
               ↑
             </button>
@@ -612,7 +612,6 @@ aside::-webkit-scrollbar-thumb {
   transform: scale(1.15) rotate(10deg);
   background-color: var(--bs-primary);
   color: white;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
 .back-to-top {
@@ -647,7 +646,6 @@ aside::-webkit-scrollbar-thumb {
 .back-to-top:hover {
   transform: translateY(-5px);
   background-color: var(--bs-link-hover-color);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
 @media (max-width: 768px) {
