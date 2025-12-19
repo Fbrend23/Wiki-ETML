@@ -12,13 +12,10 @@ const props = defineProps({
     }
 })
 
+const emit = defineEmits(['toc-click'])
+
 function scrollToHeader(id) {
-    const el = document.getElementById(id)
-    if (el) {
-        // Scroll avec un offset pour la navbar fixe (64px) + marge (20px)
-        const top = el.getBoundingClientRect().top + window.scrollY - 84
-        window.scrollTo({ top, behavior: 'smooth' })
-    }
+    emit('toc-click', id)
 }
 
 watch(() => props.activeId, async (newId) => {
