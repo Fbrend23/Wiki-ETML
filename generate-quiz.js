@@ -19,6 +19,7 @@ RÈGLES :
       - QCM à choix unique (1 bonne réponse).
       - QCM à choix multiples (PLUSIEURS bonnes réponses).
       - Vrai/Faux.
+    - IMPORTANT : Si une question est de type choix multiples, elle DOIT avoir au moins 2 bonnes réponses. Sinon, c'est un choix unique.
 4.  **Langue** : TOUT le contenu (questions, options, explications) doit être en FRANÇAIS.
 5.  **Structure** :
     - "text": La question.
