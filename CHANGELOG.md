@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.3.0 - 2025-12-20
+
+### Fonctionnalités Majeures (Quiz)
+
+- **Interface Interactive** :
+  - **Randomisation** : Les questions et les réponses sont mélangées à chaque essai pour éviter la mémorisation par position.
+
+### Expérience Utilisateur
+
+- **Signalement d'Erreurs** :
+  - **Quiz** : Un bouton "Signaler une erreur" dans chaque question permet d'ouvrir une issue GitHub pré-remplie avec l'ID de la question.
+  - **Wiki** : Un bouton "Signaler un problème sur cette page" est disponible au bas de chaque fiche de cours.
+- **Audio Conditionnel** : Le widget audio ne s'affiche désormais que si le fichier audio correspondant existe réellement.
+
+### DevOps & Automatisation
+
+- **Workflow Unifié** : Le déploiement et la génération des quiz sont désormais entièrement automatisés via GitHub Actions lors de chaque modification du dossier `public/markdown` sur la branche principale (`main`).
+
 ## v1.2.0 - 2025-12-18
 
 ### Améliorations
