@@ -2,6 +2,8 @@
 import { ref, watch, onMounted, computed, nextTick } from 'vue'
 import MarkdownIt from 'markdown-it'
 import MarkdownItAnchor from 'markdown-it-anchor'
+import quizData from '../data/quizData.json'
+import QuizModal from './QuizModal.vue'
 
 const props = defineProps({
     file: {
@@ -25,12 +27,27 @@ const md = new MarkdownIt({
 
 const html = ref('')
 
-// Calcul automatique du chemin vers le MP3
-// Transforme "/markdown/Dossier/mon-cours.md" -> "/audio/mon-cours.mp3"
 const audioSrc = computed(() => {
     if (!props.file) return null
     return props.file.replace('/markdown/', '/audio/').replace('.md', '.mp3')
 })
+
+const currentQuiz = computed(() => {
+    if (!props.file) return null
+    // Clean path logic:
+    // 1. Remove optional "./" start
+    // 2. Remove optional "/public" start (Vite dev env often adds this)
+    let cleanPath = props.file.replace(/^\.\//, '').replace(/^\/?public/, '')
+
+    // Ensure it starts with / for consistency with quizData keys
+    if (!cleanPath.startsWith('/')) {
+        cleanPath = '/' + cleanPath
+    }
+
+    return quizData[cleanPath]
+})
+
+const showQuiz = ref(false)
 
 async function load() {
     if (!props.file) return
@@ -99,6 +116,26 @@ function handleLinkClick(event) {
                 </div>
             </div>
         </div>
+
+
+
+        <div v-if="currentQuiz"
+            class="alert alert-info d-flex align-items-center justify-content-between mb-4 shadow-sm border-info-subtle">
+            <div class="d-flex align-items-center gap-3">
+                <div class="fs-2">🧠</div>
+                <div>
+                    <h6 class="mb-0 fw-bold">Testez vos connaissances !</h6>
+                    <p class="mb-0 small text-body-secondary">{{ currentQuiz.questions.length }} question{{
+                        currentQuiz.questions.length > 1 ? 's' : '' }} disponible{{ currentQuiz.questions.length > 1 ?
+                            's' : '' }}</p>
+                </div>
+            </div>
+            <button class="btn btn-primary fw-bold px-4" @click="showQuiz = true">
+                Lancer le Quiz
+            </button>
+        </div>
+
+        <QuizModal v-if="currentQuiz" v-model="showQuiz" :quiz="currentQuiz" />
 
         <article v-html="html" @click="handleLinkClick"></article>
     </div>
