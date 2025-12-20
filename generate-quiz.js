@@ -98,8 +98,8 @@ async function generateQuiz() {
     }
 
     // Calculate number of questions based on length
-    // Min 3, Max 20, ~1 per 1000 chars.
-    const questionCount = Math.max(3, Math.min(20, Math.ceil(content.length / 1000)))
+    // Min 5, Max 25, ~1 per 500 chars.
+    const questionCount = Math.max(5, Math.min(25, Math.ceil(content.length / 500)))
 
     console.log(
       `[GEN] Generating quiz for: ${key} (${content.length} chars -> ${questionCount} questions)...`,
