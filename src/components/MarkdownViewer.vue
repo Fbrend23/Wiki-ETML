@@ -118,6 +118,12 @@ function handleLinkClick(event) {
         emit('navigate', href)
     }
 }
+
+function reportIssue() {
+    const title = encodeURIComponent(`Problème contenu: ${props.file}`)
+    const body = encodeURIComponent(`Fichier: ${props.file}\n\nDescription du problème:\n`)
+    window.open(`https://github.com/Fbrend23/Wiki-ETML/issues/new?title=${title}&body=${body}`, '_blank')
+}
 </script>
 
 <template>
@@ -156,6 +162,12 @@ function handleLinkClick(event) {
         <QuizModal v-if="currentQuiz" v-model="showQuiz" :quiz="currentQuiz" />
 
         <article v-html="html" @click="handleLinkClick"></article>
+
+        <div class="mt-5 pt-4 border-top text-center text-muted">
+            <button @click="reportIssue" class="btn btn-link link-secondary text-decoration-none small">
+                ⚠️ Signaler un problème sur cette page
+            </button>
+        </div>
     </div>
 </template>
 

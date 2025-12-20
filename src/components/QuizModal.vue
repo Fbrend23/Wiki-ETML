@@ -168,6 +168,13 @@ function close() {
   isOpen.value = false
   resetQuiz()
 }
+
+function reportIssue() {
+  const q = currentQuestion.value
+  const title = encodeURIComponent(`Problème Quiz: ${props.quiz.title}`)
+  const body = encodeURIComponent(`Question ID: ${q.id}\nTexte: ${q.text}\n\nDescription du problème: \n`)
+  window.open(`https://github.com/Fbrend23/Wiki-ETML/issues/new?title=${title}&body=${body}`, '_blank')
+}
 </script>
 
 <template>
@@ -248,6 +255,12 @@ function close() {
         <BButton v-else variant="primary" size="lg" @click="nextQuestion">
           {{ currentQuestionIndex < shuffledQuestions.length - 1 ? 'Question Suivante' : 'Voir les Résultats' }}
             </BButton>
+      </div>
+
+      <div class="mt-2 text-center">
+        <button @click="reportIssue" class="btn btn-link link-secondary text-decoration-none small text-muted">
+          ⚠️ Signaler une erreur dans cette question
+        </button>
       </div>
     </div>
 
