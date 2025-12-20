@@ -2,8 +2,32 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { glob } from 'glob'
 
+import MarkdownIt from 'markdown-it'
+
+const md = new MarkdownIt()
 const MARKDOWN_DIR = 'public/markdown'
 const OUTPUT_FILE = 'public/content.json'
+
+function extractPlainText(markdown) {
+  const tokens = md.parse(markdown, {})
+  let text = ''
+
+  for (const token of tokens) {
+    if (token.type === 'inline' && token.children) {
+      for (const child of token.children) {
+        if (child.type === 'text' || child.type === 'code_inline') {
+          text += ' ' + child.content
+        } else if (child.type === 'image') {
+          text += ' ' + child.content // alt text
+        }
+      }
+    } else if (token.type === 'fence' || token.type === 'code_block') {
+      text += ' ' + token.content
+    }
+  }
+
+  return text.replace(/\s+/g, ' ').trim()
+}
 
 async function generateIndex() {
   // Trouver tous les fichiers
@@ -40,12 +64,9 @@ async function generateIndex() {
 
     // Lecture du contenu pour la recherche
     const fileContent = fs.readFileSync(file, 'utf-8')
-    // Nettoyage basique (enlève les #, *, liens md, etc. pour ne garder que le texte)
-    const searchContent = fileContent
-      .replace(/[#*`[\]()-]/g, ' ') // Enlève les caractères spéciaux MD
-      .replace(/\s+/g, ' ') // Normalise les espaces
-      .trim()
-      .toLowerCase()
+
+    // Nettoyage via MarkdownIt pour avoir du texte propre
+    const searchContent = extractPlainText(fileContent)
 
     if (!structure[category]) {
       structure[category] = []

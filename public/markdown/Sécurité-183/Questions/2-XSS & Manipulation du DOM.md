@@ -32,15 +32,16 @@ Elle peut donner un accès complet à la session, modifier l’interface, ou dé
 
 Protection efficace → combinaison de plusieurs approches :
 
-1. **Échappement systématique** du contenu avant affichage dans les templates.
-2. **Frameworks modernes** (React, Vue, Angular) qui échappent automatiquement le HTML injecté.
-3. Validation stricte côté serveur :
-   - Utiliser des middlewares comme **Helmet** (`app.use(helmet())`) pour sécuriser les headers HTTP.
+**Échappement systématique** du contenu avant affichage dans les templates.
+**Frameworks modernes** (React, Vue, Angular) qui échappent automatiquement le HTML injecté.
 
+Validation stricte côté serveur :
+
+- Utiliser des middlewares comme **Helmet** (`app.use(helmet())`) pour sécuriser les headers HTTP.
 - supprimer les balises `<script>`,
 - filtrer les événements HTML (`onclick`, `onload`).
 
-4. Application d’une **Content Security Policy** :
+Application d’une **Content Security Policy** :
 
 - empêche l’exécution de scripts inline,
 - limite les sources autorisées,

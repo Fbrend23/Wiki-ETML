@@ -42,6 +42,11 @@ jobs:
       - name: Générer l'index du contenu
         run: npm run gen:content
 
+      - name: Générer les Quiz
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: npm run gen:quiz
+
       - name: Build
         run: npm run build
 

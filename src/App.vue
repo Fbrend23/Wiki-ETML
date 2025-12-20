@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import MarkdownViewer from './components/MarkdownViewer.vue'
+import TableOfContents from './components/TableOfContents.vue'
 import { BApp } from 'bootstrap-vue-next'
 // Import du logo
 import logoSrc from './assets/livres.png'
@@ -9,6 +10,8 @@ const categories = ref({})
 const selected = ref(null)
 const mainContent = ref(null)
 const showScrollTop = ref(false)
+const currentHeaders = ref([]) // Pour le TOC
+const activeHeaderId = ref('') // Pour le scroll spy (bonus)
 
 // Recherche
 const searchQuery = ref('')
@@ -69,6 +72,7 @@ const searchResults = computed(() => {
   return results
 })
 
+// Navigation interne
 function selectSearchResult(file) {
   selected.value = file.file
   searchQuery.value = ''
@@ -125,9 +129,31 @@ const groupedCategories = computed(() => {
   return sortedGroups
 })
 
+const breadcrumbs = computed(() => {
+  if (!selected.value) return []
+
+  // Trouver la catégorie qui contient le fichier sélectionné
+  for (const [category, files] of Object.entries(categories.value)) {
+    if (files.find(f => f.file === selected.value)) {
+      // "Sécurité > Web" -> ["Sécurité", "Web"]
+      return category.split(' > ')
+    }
+  }
+  return []
+})
+
 function handleScroll() {
   if (!mainContent.value) return
   showScrollTop.value = mainContent.value.scrollTop > 300
+
+  // Détection du bas de page pour le TOC
+  const { scrollTop, clientHeight, scrollHeight } = mainContent.value
+  // Si on est à 50px du bas ou moins
+  if (scrollTop + clientHeight >= scrollHeight - 50) {
+    if (currentHeaders.value.length > 0) {
+      activeHeaderId.value = currentHeaders.value[currentHeaders.value.length - 1].slug
+    }
+  }
 }
 
 function scrollToTop() {
@@ -135,6 +161,9 @@ function scrollToTop() {
 }
 
 watch(selected, () => {
+  // Reset TOC quand on change de fichier
+  currentHeaders.value = []
+
   if (mainContent.value) {
     mainContent.value.scrollTo({ top: 0, behavior: 'instant' })
   }
@@ -159,6 +188,10 @@ function toggleTheme() {
   const theme = dark.value ? 'dark' : 'light'
   document.documentElement.setAttribute('data-bs-theme', theme)
   localStorage.setItem('theme', theme)
+}
+
+function printPage() {
+  window.print()
 }
 
 function handleNavigate(href) {
@@ -195,13 +228,65 @@ function handleNavigate(href) {
     })
   }
 }
+
+function updateTOC(headers) {
+  currentHeaders.value = headers
+
+  // Wait for DOM update then setup observer
+  setTimeout(setupObserver, 100)
+}
+
+// Scroll Spy Logic
+let observer = null
+const visibleHeaders = ref(new Set())
+
+function setupObserver() {
+  if (observer) {
+    observer.disconnect()
+  }
+
+  // Reset visibility set on new content
+  visibleHeaders.value.clear()
+
+  const options = {
+    root: mainContent.value,
+    // -80px (header) to -30% (lower down)
+    // Larger window prevents skipping short sections
+    rootMargin: '-80px 0px -30% 0px',
+    threshold: 0
+  }
+
+  observer = new IntersectionObserver((entries) => {
+    // 1. Update set of visible headers
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        visibleHeaders.value.add(entry.target.id)
+      } else {
+        visibleHeaders.value.delete(entry.target.id)
+      }
+    })
+
+    // 2. Pick the FIRST matching header from our ordered list
+    // This ensures that if Header A and Header B are both visible, A (topmost) wins.
+    const firstVisible = currentHeaders.value.find(h => visibleHeaders.value.has(h.slug))
+    if (firstVisible) {
+      activeHeaderId.value = firstVisible.slug
+    }
+  }, options)
+
+  currentHeaders.value.forEach(h => {
+    const el = document.getElementById(h.slug)
+    if (el) observer.observe(el)
+  })
+}
 </script>
 
 <template>
   <BApp>
-    <div class="d-flex flex-column vh-100 bg-body">
+    <!-- SCREEN VIEW ONLY (HIDDEN ON PRINT) -->
+    <div class="layout-wrapper d-flex flex-column vh-100 bg-body d-print-none">
       <a href="https://github.com/Fbrend23/Wiki-ETML" target="_blank"
-        class="github-float d-flex align-items-center justify-content-center text-decoration-none shadow-lg"
+        class="github-float d-flex align-items-center justify-content-center text-decoration-none"
         title="Voir le code source">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github"
           viewBox="0 0 16 16">
@@ -214,13 +299,24 @@ function handleNavigate(href) {
           <button class="navbar-toggler border-0" type="button" @click="mobileMenu = true">
             <span class="navbar-toggler-icon"></span>
           </button>
+
           <div class="d-flex align-items-center gap-2 mx-auto">
-            <img :src="logoSrc" alt="Logo" width="30" height="30">
-            <h1 class="mb-0 h5 fw-bold">Wiki ETML</h1>
+            <div v-if="!selected" class="fw-bold">Wiki ETML</div>
+            <div v-else class="text-truncate fw-bold small" style="max-width: 150px;">
+              {{
+                Object.values(categories)
+                  .flat()
+                  .find(f => f.file === selected)
+                  ?.name || 'Cours'
+              }}
+            </div>
           </div>
-          <button @click="toggleTheme" class="btn btn-link text-decoration-none fs-5 p-0">
-            {{ dark ? '🌙' : '☀️' }}
-          </button>
+
+          <div class="d-flex gap-2">
+            <button @click="toggleTheme" class="btn btn-link text-decoration-none fs-5 p-0">
+              {{ dark ? '🌙' : '☀️' }}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -265,6 +361,7 @@ function handleNavigate(href) {
         </button>
       </nav>
 
+      <!-- Mobile Menu (Left) -->
       <transition name="fade">
         <aside v-if="mobileMenu" class="position-fixed top-0 start-0 w-100 h-100 d-md-none" style="z-index: 1040;">
           <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50" @click="mobileMenu = false"></div>
@@ -327,7 +424,7 @@ function handleNavigate(href) {
         </aside>
       </transition>
 
-      <div class="d-flex flex-grow-1 overflow-hidden">
+      <div class="layout-inner d-flex flex-grow-1 overflow-hidden">
 
         <aside v-if="desktopMenu" class="d-none d-md-flex flex-column border-end bg-body-tertiary overflow-y-auto"
           style="width: 320px; transition: width 0.3s;">
@@ -358,25 +455,75 @@ function handleNavigate(href) {
           </div>
         </aside>
 
-        <main class="flex-grow-1 p-0 overflow-y-auto bg-body position-relative" ref="mainContent"
-          @scroll="handleScroll">
-          <div class="container-md py-5" style="max-width: 900px;">
-            <MarkdownViewer v-if="selected" :file="selected" @navigate="handleNavigate" />
-
-            <div v-else class="text-center mt-5 pt-5 text-muted">
-              <div class="fs-1 mb-3">📚</div>
-              <h2 class="h4">Bienvenue sur le Wiki ETML</h2>
-              <p>Sélectionnez un cours dans le menu pour commencer.</p>
+        <main class="flex-grow-1 p-0 overflow-hidden bg-body position-relative d-flex">
+          <div class="content-scroller flex-grow-1 overflow-y-auto" ref="mainContent" @scroll="handleScroll">
+            <!-- Print Button (Sticky top-right of main content) -->
+            <!-- Height 0 wrapper to avoid pushing content, positioned sticky to stay visible -->
+            <div v-if="selected" class="position-sticky top-0 end-0 p-3 d-flex justify-content-end"
+              style="z-index: 100; pointer-events: none; height: 0; overflow: visible;">
+              <button @click="printPage"
+                class="btn btn-light rounded-circle d-flex align-items-center justify-content-center print-btn"
+                style="width: 45px; height: 45px; pointer-events: auto; border: none;" title="Imprimer / PDF">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-printer"
+                  viewBox="0 0 16 16">
+                  <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" />
+                  <path
+                    d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z" />
+                </svg>
+              </button>
             </div>
+
+            <div id="print-area" class="container-md py-5" style="max-width: 900px;">
+              <!-- Fil d'Ariane -->
+              <nav v-if="selected" aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb mb-0">
+                  <li class="breadcrumb-item">
+                    <a href="#" @click.prevent="selected = null" class="text-decoration-none text-muted">Acuueil</a>
+                  </li>
+                  <!-- Catégories dynamiques -->
+                  <li v-for="(item, index) in breadcrumbs" :key="index" class="breadcrumb-item text-muted"
+                    aria-current="page">
+                    {{ item }}
+                  </li>
+                </ol>
+              </nav>
+
+              <MarkdownViewer v-if="selected" :file="selected" @navigate="handleNavigate" @toc-updated="updateTOC" />
+
+              <div v-else class="text-center mt-5 pt-5 text-muted">
+                <div class="fs-1 mb-3">📚</div>
+                <h2 class="h4">Bienvenue sur le Wiki ETML</h2>
+                <p>Sélectionnez un cours dans le menu pour commencer.</p>
+              </div>
+            </div>
+
           </div>
 
           <!-- Back to Top Button -->
           <transition name="fade">
-            <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top shadow-lg" title="Retour en haut">
+            <button v-if="showScrollTop" @click="scrollToTop" class="back-to-top"
+              :class="{ 'with-toc': selected && currentHeaders.length > 0 }" title="Retour en haut">
               ↑
             </button>
           </transition>
+
+          <!-- TOC Sidebar (Static / Independent Scroll) - Desktop -->
+          <div v-if="selected && currentHeaders.length > 0" class="d-none d-xl-block border-start"
+            style="width: 250px; min-width: 250px;">
+            <TableOfContents :headers="currentHeaders" :active-id="activeHeaderId"
+              @toc-click="handleNavigate('#' + $event)" />
+          </div>
         </main>
+      </div>
+    </div>
+
+    <!-- PRINT VIEW ONLY (VISIBLE ONLY ON PRINT) -->
+    <!-- This structure escapes the flexbox/overflow labyrinth entirely -->
+    <div class="d-none d-print-block print-view">
+      <div class="container-fluid p-5">
+        <!-- Re-use the Markdown Viewer with a key to ensure fresh render if needed, though mostly static -->
+        <MarkdownViewer v-if="selected" :file="selected" :key="'print-' + selected" @navigate="() => { }"
+          @toc-updated="() => { }" />
       </div>
     </div>
   </BApp>
@@ -485,13 +632,13 @@ aside::-webkit-scrollbar-thumb {
   transform: scale(1.15) rotate(10deg);
   background-color: var(--bs-primary);
   color: white;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
 .back-to-top {
   position: fixed;
-  bottom: 80px;
-  right: 20px;
+  bottom: 20px;
+  right: 80px;
+  /* Default: Left of GitHub button (20px + 50px + 10px gap) */
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -506,13 +653,19 @@ aside::-webkit-scrollbar-thumb {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   padding-bottom: 4px;
-  /* Visual adjustment for arrow */
+}
+
+/* On Desktop XL, if TOC is present, move button to left of TOC */
+@media (min-width: 1200px) {
+  .back-to-top.with-toc {
+    right: 270px;
+    /* 250px TOC + 20px gap */
+  }
 }
 
 .back-to-top:hover {
   transform: translateY(-5px);
   background-color: var(--bs-link-hover-color);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
 @media (max-width: 768px) {
@@ -530,18 +683,57 @@ aside::-webkit-scrollbar-thumb {
     height: 45px;
     font-size: 1.2rem;
   }
-
-  .back-to-top {
-    bottom: 70px;
-    right: 15px;
-    width: 45px;
-    height: 45px;
-    font-size: 1.2rem;
-  }
 }
 
 .search-dropdown {
   max-height: 300px;
   overflow-y: auto;
+}
+
+@media print {
+
+  /* 1. Ensure Global Resets */
+  @page {
+    margin: 2cm;
+    size: auto;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* 2. Audio Widget hiding (class based just in case) */
+  .audio-widget {
+    display: none !important;
+  }
+
+  /* 3. Helper for Print View */
+  /* The d-print-block class handles the display, but we ensure dimensions */
+  .print-view {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .print-view .markdown-body article {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Prevent page breaks inside sensitive elements */
+  h1,
+  h2,
+  h3,
+  img,
+  pre,
+  code {
+    page-break-inside: avoid;
+  }
 }
 </style>

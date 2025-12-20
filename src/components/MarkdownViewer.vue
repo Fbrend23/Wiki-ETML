@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, onMounted, computed, nextTick } from 'vue'
 import MarkdownIt from 'markdown-it'
+import MarkdownItAnchor from 'markdown-it-anchor'
+import quizData from '../data/quizData.json'
+import QuizModal from './QuizModal.vue'
 
 const props = defineProps({
     file: {
@@ -9,31 +12,90 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['navigate'])
+const emit = defineEmits(['navigate', 'toc-updated'])
 
+// Configuration de Markdown-it avec Anchor
+// Permet d'ajouter des ID automatiques aux titres pour le TOC
 const md = new MarkdownIt({
     html: true,
     breaks: true,
     linkify: true
+}).use(MarkdownItAnchor, {
+    permalink: false, // Pas de lien direct visible (géré par TOC)
+    slugify: (s) => s.trim().toLowerCase().replace(/[\s\W-]+/g, '-')
 })
 
 const html = ref('')
 
-// Calcul automatique du chemin vers le MP3
-// Transforme "/markdown/Dossier/mon-cours.md" -> "/audio/mon-cours.mp3"
-const audioSrc = computed(() => {
+const audioSrc = ref(null)
+
+watch(() => props.file, async () => {
+    if (!props.file) {
+        audioSrc.value = null
+        return
+    }
+
+    const possiblePath = props.file.replace('/markdown/', '/audio/').replace('.md', '.mp3')
+
+    // Check if audio file exists via HEAD request
+    try {
+        const res = await fetch(possiblePath, { method: 'HEAD' })
+        if (res.ok && res.headers.get('content-type')?.includes('audio')) {
+            audioSrc.value = possiblePath
+        } else {
+            audioSrc.value = null
+        }
+    } catch {
+        audioSrc.value = null
+    }
+}, { immediate: true })
+
+const currentQuiz = computed(() => {
     if (!props.file) return null
-    return props.file.replace('/markdown/', '/audio/').replace('.md', '.mp3')
+    // Clean path logic:
+    // 1. Remove optional "./" start
+    // 2. Remove optional "/public" start (Vite dev env often adds this)
+    let cleanPath = props.file.replace(/^\.\//, '').replace(/^\/?public/, '')
+
+    // Ensure it starts with / for consistency with quizData keys
+    if (!cleanPath.startsWith('/')) {
+        cleanPath = '/' + cleanPath
+    }
+
+    return quizData[cleanPath]
 })
+
+const showQuiz = ref(false)
 
 async function load() {
     if (!props.file) return
     try {
         const text = await fetch(props.file).then(res => res.text())
         html.value = md.render(text)
+
+        // 1. Extraction des en-têtes pour le TOC
+        // On attend que le DOM soit mis à jour
+        await nextTick()
+        extractHeaders()
     } catch {
         html.value = "<div class='alert alert-danger'>Erreur de chargement du contenu</div>"
     }
+}
+
+function extractHeaders() {
+    const article = document.querySelector('.markdown-body article')
+    if (!article) return
+
+    const headersElements = article.querySelectorAll('h2, h3')
+
+    const headers = Array.from(headersElements).map(el => ({
+        id: el.id,      // Généré par markdown-it-anchor
+        slug: el.id,    // Alias
+        text: el.textContent,
+        level: parseInt(el.tagName.substring(1))
+    }))
+
+    emit('toc-updated', headers)
 }
 
 // charge au montage
@@ -61,7 +123,7 @@ function handleLinkClick(event) {
 <template>
     <div class="markdown-body position-relative">
 
-        <div v-if="audioSrc" class="card border-0 shadow-sm mb-4 bg-body-tertiary">
+        <div v-if="audioSrc" class="audio-widget card border-0 shadow-sm mb-4 bg-body-tertiary">
             <div class="card-body d-flex align-items-center gap-3 py-2">
                 <div class="fs-2">🎧</div>
                 <div class="flex-grow-1">
@@ -72,6 +134,26 @@ function handleLinkClick(event) {
                 </div>
             </div>
         </div>
+
+
+
+        <div v-if="currentQuiz"
+            class="alert alert-info d-flex align-items-center justify-content-between mb-4 shadow-sm border-info-subtle">
+            <div class="d-flex align-items-center gap-3">
+                <div class="fs-2">🧠</div>
+                <div>
+                    <h6 class="mb-0 fw-bold">Testez vos connaissances !</h6>
+                    <p class="mb-0 small text-body-secondary">{{ currentQuiz.questions.length }} question{{
+                        currentQuiz.questions.length > 1 ? 's' : '' }} disponible{{ currentQuiz.questions.length > 1 ?
+                            's' : '' }}</p>
+                </div>
+            </div>
+            <button class="btn btn-primary fw-bold px-4" @click="showQuiz = true">
+                Lancer le Quiz
+            </button>
+        </div>
+
+        <QuizModal v-if="currentQuiz" v-model="showQuiz" :quiz="currentQuiz" />
 
         <article v-html="html" @click="handleLinkClick"></article>
     </div>
