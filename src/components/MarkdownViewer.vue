@@ -27,10 +27,28 @@ const md = new MarkdownIt({
 
 const html = ref('')
 
-const audioSrc = computed(() => {
-    if (!props.file) return null
-    return props.file.replace('/markdown/', '/audio/').replace('.md', '.mp3')
-})
+const audioSrc = ref(null)
+
+watch(() => props.file, async () => {
+    if (!props.file) {
+        audioSrc.value = null
+        return
+    }
+
+    const possiblePath = props.file.replace('/markdown/', '/audio/').replace('.md', '.mp3')
+
+    // Check if audio file exists via HEAD request
+    try {
+        const res = await fetch(possiblePath, { method: 'HEAD' })
+        if (res.ok && res.headers.get('content-type')?.includes('audio')) {
+            audioSrc.value = possiblePath
+        } else {
+            audioSrc.value = null
+        }
+    } catch {
+        audioSrc.value = null
+    }
+}, { immediate: true })
 
 const currentQuiz = computed(() => {
     if (!props.file) return null
