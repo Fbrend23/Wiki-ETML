@@ -1,0 +1,394 @@
+{
+  "/markdown/DevOps-324/3-Git.md": {
+    "title": "Quiz: Git",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel est le bon ordre du workflow Git de base ?",
+        "options": [
+          "Repository local → Staging → Working directory → Repository distant",
+          "Working directory → Repository local → Staging → Repository distant",
+          "Working directory → Staging → Repository local → Repository distant",
+          "Repository distant → Repository local → Staging → Working directory"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'Working directory → Staging → Repository local → Repository distant'."
+      },
+      {
+        "id": 2,
+        "text": "Quelle branche est utilisée pour la production selon les conventions Git ?",
+        "options": [
+          "develop",
+          "main",
+          "test",
+          "feature"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : '**main** : production'."
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : Les branches Git doivent être nommées en majuscules.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'minuscules, pas d’espace'."
+      },
+      {
+        "id": 4,
+        "text": "Quel est le format de versioning utilisé dans Git selon le texte ?",
+        "options": [
+          "MAJEUR.MINOR.PATCH",
+          "MAJEUR.PATCH.MINOR",
+          "PATCH.MINOR.MAJEUR",
+          "MINOR.MAJEUR.PATCH"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Format : **MAJEUR.MINOR.PATCH**'."
+      },
+      {
+        "id": 5,
+        "text": "Quelle commande Git est utilisée pour mettre de côté du travail sans commit ?",
+        "options": [
+          "git commit",
+          "git stash",
+          "git reset",
+          "git push"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'À quoi sert `git stash` ? Mettre de côté du travail sans commit'."
+      },
+      {
+        "id": 6,
+        "text": "Vrai ou Faux : Les secrets doivent être ajoutés dans Git.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : '❌ À ne pas mettre : Secrets / `.env`'."
+      }
+    ]
+  },
+  "/markdown/DevOps-324/2-DevOps.md": {
+    "title": "Quiz: DevOps",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quels sont les éléments essentiels de DevOps selon le texte ?",
+        "options": [
+          "Culture, pratiques, outils",
+          "Culture, tests, documentation",
+          "Pratiques, tests, outils",
+          "Outils, documentation, tests"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Culture + pratiques + outils pour rapprocher : Dev et Ops.'"
+      },
+      {
+        "id": 2,
+        "text": "Quel est le problème principal que DevOps cherche à résoudre ?",
+        "options": [
+          "Manque de tests",
+          "Manque de communication",
+          "Manque de documentation",
+          "Manque de sécurité"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte mentionne : 'Objectifs opposés entre Dev et Ops → manque de communication et d’outils intégrés.'"
+      },
+      {
+        "id": 3,
+        "text": "Quelle est la différence principale entre Continuous Delivery et Continuous Deployment ?",
+        "options": [
+          "Delivery est manuel, Deployment est automatique",
+          "Delivery est automatique, Deployment est manuel",
+          "Delivery inclut des tests, Deployment non",
+          "Delivery est pour le développement, Deployment pour la production"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte précise : 'Delivery : automatisé jusqu’au _staging_, déploiement en prod manuel. Deployment : déploiement _automatique_ en production.'"
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : L'étape 'Operate' dans les 8 étapes DevOps concerne la surveillance et la gestion des incidents.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Operate – Surveillance, gestion incidents.'"
+      },
+      {
+        "id": 5,
+        "text": "Quelles sont les étapes clés pour construire un plan CI/CD ?",
+        "options": [
+          "Définir les objectifs, automatiser les tests, intégrer la sécurité",
+          "Définir les objectifs, créer des artefacts, surveiller les logs",
+          "Automatiser les tests, compiler le code, gérer les incidents",
+          "Intégrer la sécurité, compiler le code, déployer en production"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte mentionne : 'Définir les objectifs, Automatiser les tests, Intégrer la sécurité.'"
+      }
+    ]
+  },
+  "/markdown/DevOps-324/1-Lean.md": {
+    "title": "Quiz: Lean",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel est l'un des principes du Lean Software Development ?",
+        "options": [
+          "Éliminer le gaspillage",
+          "Augmenter les coûts",
+          "Réduire l'apprentissage",
+          "Livrer lentement"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte mentionne : '1. Éliminer le gaspillage' comme l'un des principes."
+      },
+      {
+        "id": 2,
+        "text": "Quel est un avantage du Lean Software Development ?",
+        "options": [
+          "Augmentation des activités inutiles",
+          "Équipe moins autonome",
+          "Plus de fonctionnalités en moins de temps",
+          "Augmentation des coûts"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'Plus de fonctionnalités en moins de temps' comme un avantage."
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : Lean et Agile visent tous deux l'amélioration continue.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte précise : 'Les deux visent l’amélioration continue.'"
+      },
+      {
+        "id": 4,
+        "text": "Quelle est une bonne pratique commune au Lean et Agile ?",
+        "options": [
+          "Réunions mensuelles",
+          "Automatisation des tests",
+          "Livraison annuelle",
+          "Engagement minimal du client"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte mentionne : 'Automatisation des tests' comme une bonne pratique."
+      },
+      {
+        "id": 5,
+        "text": "Quel est l'objectif de l'intégration continue (CI) ?",
+        "options": [
+          "Intégrer le code rarement",
+          "Détecter les bugs tôt",
+          "Éviter les tests automatisés",
+          "Livrer un produit qui ne répond pas aux besoins"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Détecter les bugs tôt = moins coûteux' comme un objectif de l'intégration continue."
+      }
+    ]
+  },
+  "/markdown/DevOps-324/Github Actions/2-GitHub Actions Plus.md": {
+    "title": "Quiz: GitHub Actions Plus",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel type de variable est défini au niveau du workflow dans GitHub Actions ?",
+        "options": [
+          "VAR_GLOBAL",
+          "VAR_JOB",
+          "VAR_STEP",
+          "VAR_SECRET"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Niveau workflow env: VAR_GLOBAL: 'Valeur''."
+      },
+      {
+        "id": 2,
+        "text": "Les secrets dans GitHub Actions peuvent-ils commencer par 'GITHUB_' ?",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'ne doivent pas commencer par GITHUB_'."
+      },
+      {
+        "id": 3,
+        "text": "Quelle est la limite de taille pour les secrets dans GitHub Actions ?",
+        "options": [
+          "24 Ko",
+          "48 Ko",
+          "64 Ko",
+          "128 Ko"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'limite 48 Ko'."
+      },
+      {
+        "id": 4,
+        "text": "Quel est le format utilisé pour écrire des expressions dans GitHub Actions ?",
+        "options": [
+          "${{ ... }}",
+          "{{ ... }}",
+          "[[ ... ]]",
+          "( ... )"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Écrites dans : ${{ ... }}'."
+      },
+      {
+        "id": 5,
+        "text": "Quels sont les types principaux de contextes disponibles dans GitHub Actions ?",
+        "options": [
+          "github, env, job, steps, runner, secrets, vars",
+          "github, env, job, steps, runner, secrets",
+          "github, env, job, steps, vars",
+          "env, job, steps, runner, secrets, vars"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Types principaux : github, env, job, steps, runner, secrets, vars'."
+      }
+    ]
+  },
+  "/markdown/DevOps-324/Github Actions/1-Introduction.md": {
+    "title": "Quiz: Introduction",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Qu'est-ce que GitHub Actions permet d'automatiser ?",
+        "options": [
+          "La gestion des utilisateurs",
+          "Les tests, déploiements, formatage du code et analyses",
+          "La création de sites web",
+          "La gestion des bases de données"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'GitHub Actions est une plateforme CI/CD permettant d'automatiser des tâches telles que tests, déploiements, formatage du code et analyses.'"
+      },
+      {
+        "id": 2,
+        "text": "Quel fichier est utilisé pour décrire un workflow dans GitHub Actions ?",
+        "options": [
+          "Un fichier JSON",
+          "Un fichier XML",
+          "Un fichier YAML",
+          "Un fichier TXT"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'Workflow : fichier YAML décrivant l'automatisation.'"
+      },
+      {
+        "id": 3,
+        "text": "Les jobs dans GitHub Actions s'exécutent-ils par défaut en parallèle ?",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Les jobs s'exécutent par défaut en parallèle.'"
+      },
+      {
+        "id": 4,
+        "text": "Quels sont les deux types de runners disponibles dans GitHub Actions ?",
+        "options": [
+          "Runners GitHub hébergés et runners self-hosted",
+          "Runners locaux et runners distants",
+          "Runners gratuits et runners payants",
+          "Runners rapides et runners lents"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Deux types : runners GitHub hébergés, runners self-hosted.'"
+      },
+      {
+        "id": 5,
+        "text": "Quel type de step utilise une action dans GitHub Actions ?",
+        "options": [
+          "Step 'run'",
+          "Step 'uses'",
+          "Step 'exec'",
+          "Step 'perform'"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Deux types : steps \"run\" (shell), steps \"uses\" (actions).' pour les steps."
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/1-Authentification & Mots de passe.md": {
+    "title": "Quiz: Authentification & Mots de passe",
+    "questions": [
+      {
+        "id": 1,
+        "text": "À quoi sert le « salt » ajouté à un mot de passe ?",
+        "options": [
+          "À rendre les mots de passe plus courts.",
+          "À empêcher l'utilisation de rainbow tables.",
+          "À chiffrer les mots de passe.",
+          "À rendre les mots de passe plus faciles à mémoriser."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Il permet de renforcer massivement la sécurité en empêchant : l’utilisation de rainbow tables, car chaque hachage devient unique.'"
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les exemples de mots de passe qui peuvent être crackés instantanément ?",
+        "options": [
+          "J'aime.Manger.Des.Pommes.Rouges!",
+          "Maison123",
+          "123456",
+          "Correct-Horse-Battery-Staple"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'Cracké instantanément : Exemples : 123456, password, admin, qwerty.'"
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : Le hachage est une opération réversible.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Hachage : opération à sens unique.'"
+      },
+      {
+        "id": 4,
+        "text": "Quels facteurs sont utilisés dans l'authentification multi-facteurs ?",
+        "options": [
+          "Ce que je sais",
+          "Ce que je possède",
+          "Ce que je suis",
+          "Ce que je fais"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte indique : 'Elle repose sur l'utilisation d'au moins deux facteurs parmi : Ce que je sais, Ce que je possède, Ce que je suis.'"
+      },
+      {
+        "id": 5,
+        "text": "Pourquoi est-il important d'utiliser des algorithmes de hash lents ?",
+        "options": [
+          "Pour réduire la taille des mots de passe.",
+          "Pour rendre les attaques de brute-force plus coûteuses.",
+          "Pour faciliter la récupération des mots de passe.",
+          "Pour augmenter la vitesse de traitement des mots de passe."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'les attaques de brute-force sont de plus en plus réalistes, et l’utilisation d’algorithmes de hash lents est absolument indispensable.'"
+      }
+    ]
+  }
+}

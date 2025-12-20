@@ -35,17 +35,50 @@ const progress = computed(() => {
   return ((currentQuestionIndex.value) / props.quiz.questions.length) * 100
 })
 
+
 function selectOption(index) {
   if (isAnswered.value) return
-  selectedOption.value = index
+
+  const correct = currentQuestion.value.correctAnswer
+  const isMulti = Array.isArray(correct)
+
+  if (isMulti) {
+    // Toggle selection
+    if (!selectedOption.value) selectedOption.value = []
+    // Ensure it's an array (legacy check)
+    if (!Array.isArray(selectedOption.value)) selectedOption.value = []
+
+    const idx = selectedOption.value.indexOf(index)
+    if (idx === -1) {
+      selectedOption.value = [...selectedOption.value, index]
+    } else {
+      selectedOption.value = selectedOption.value.filter(i => i !== index)
+    }
+  } else {
+    // Single select
+    selectedOption.value = index
+  }
 }
 
 function validateAnswer() {
   if (selectedOption.value === null) return
+  const correct = currentQuestion.value.correctAnswer
+  const isMulti = Array.isArray(correct)
 
   isAnswered.value = true
-  if (selectedOption.value === currentQuestion.value.correctAnswer) {
-    score.value++
+
+  if (isMulti) {
+    // Compare arrays (sort both to be sure)
+    const sortedSelected = [...selectedOption.value].sort()
+    const sortedCorrect = [...correct].sort()
+
+    const isCorrect = JSON.stringify(sortedSelected) === JSON.stringify(sortedCorrect)
+    if (isCorrect) score.value++
+  } else {
+    // Single compare
+    if (selectedOption.value === correct) {
+      score.value++
+    }
   }
 }
 
@@ -76,7 +109,7 @@ function close() {
 
 <template>
   <BModal v-model="isOpen" :title="quiz.title" size="lg" footer-class="d-none" @hide="resetQuiz" centered>
-    <div v-if="!showResult">
+    <div v-if="!showResult" class="quiz-container">
       <!-- Progress Bar -->
       <div class="mb-4">
         <div class="d-flex justify-content-between text-muted small mb-1">
@@ -93,20 +126,35 @@ function close() {
       <div class="d-grid gap-3 mb-4">
         <button v-for="(option, index) in currentQuestion.options" :key="index" @click="selectOption(index)"
           class="btn text-start p-3 position-relative border" :class="{
-            'btn-outline-primary': !isAnswered && selectedOption !== index,
-            'btn-primary': !isAnswered && selectedOption === index,
-            'btn-success': isAnswered && index === currentQuestion.correctAnswer,
-            'btn-danger': isAnswered && selectedOption === index && index !== currentQuestion.correctAnswer,
-            'btn-light text-muted': isAnswered && index !== currentQuestion.correctAnswer && selectedOption !== index
+            // Selection state
+            'btn-outline-primary': !isAnswered && (Array.isArray(selectedOption) ? !selectedOption.includes(index) : selectedOption !== index),
+            'btn-primary': !isAnswered && (Array.isArray(selectedOption) ? selectedOption.includes(index) : selectedOption === index),
+
+            // Result state
+            'btn-success': isAnswered && (Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer.includes(index) : index === currentQuestion.correctAnswer),
+            'btn-danger': isAnswered &&
+              (Array.isArray(selectedOption) ? selectedOption.includes(index) && !currentQuestion.correctAnswer.includes(index) : selectedOption === index && index !== currentQuestion.correctAnswer),
+            'btn-light text-muted': isAnswered &&
+              (Array.isArray(currentQuestion.correctAnswer) ? !currentQuestion.correctAnswer.includes(index) && !selectedOption.includes(index) : index !== currentQuestion.correctAnswer && selectedOption !== index)
           }" :disabled="isAnswered">
-          <span class="fw-bold me-2">{{ ['A', 'B', 'C', 'D'][index] }}.</span> {{ option }}
+          <span class="fw-bold me-2">
+            <template v-if="Array.isArray(currentQuestion.correctAnswer)">
+              {{ (Array.isArray(selectedOption) && selectedOption.includes(index)) ? '☑' : '☐' }}
+            </template>
+            <template v-else>
+              {{ ['A', 'B', 'C', 'D'][index] }}.
+            </template>
+          </span>
+          {{ option }}
 
           <!-- Feedback Icons -->
-          <span v-if="isAnswered && index === currentQuestion.correctAnswer"
+          <span
+            v-if="isAnswered && (Array.isArray(currentQuestion.correctAnswer) ? currentQuestion.correctAnswer.includes(index) : index === currentQuestion.correctAnswer)"
             class="position-absolute top-50 end-0 translate-middle-y me-3">
             ✅
           </span>
-          <span v-if="isAnswered && selectedOption === index && index !== currentQuestion.correctAnswer"
+          <span
+            v-if="isAnswered && (Array.isArray(selectedOption) ? selectedOption.includes(index) && !currentQuestion.correctAnswer.includes(index) : selectedOption === index && index !== currentQuestion.correctAnswer)"
             class="position-absolute top-50 end-0 translate-middle-y me-3">
             ❌
           </span>
@@ -116,16 +164,21 @@ function close() {
       <!-- Explanation & Next Button -->
       <transition name="fade">
         <div v-if="isAnswered" class="bg-body-tertiary p-3 rounded mb-3 border">
-          <div class="fw-bold mb-1"
-            :class="selectedOption === currentQuestion.correctAnswer ? 'text-success' : 'text-danger'">
-            {{ selectedOption === currentQuestion.correctAnswer ? 'Bonne réponse !' : 'Mauvaise réponse...' }}
+          <div class="fw-bold mb-1" :class="(Array.isArray(currentQuestion.correctAnswer) ?
+            (JSON.stringify([...selectedOption].sort()) === JSON.stringify([...currentQuestion.correctAnswer].sort())) :
+            selectedOption === currentQuestion.correctAnswer) ? 'text-success' : 'text-danger'">
+            {{ (Array.isArray(currentQuestion.correctAnswer) ?
+              (JSON.stringify([...selectedOption].sort()) === JSON.stringify([...currentQuestion.correctAnswer].sort()))
+              :
+              selectedOption === currentQuestion.correctAnswer) ? 'Bonne réponse !' : 'Mauvaise réponse...' }}
           </div>
           <p class="mb-0 small text-muted">{{ currentQuestion.explanation }}</p>
         </div>
       </transition>
 
       <div class="d-flex justify-content-center mt-4">
-        <BButton v-if="!isAnswered" variant="primary" size="lg" :disabled="selectedOption === null"
+        <BButton v-if="!isAnswered" variant="primary" size="lg"
+          :disabled="selectedOption === null || (Array.isArray(selectedOption) && selectedOption.length === 0)"
           @click="validateAnswer">
           Valider
         </BButton>
@@ -142,7 +195,8 @@ function close() {
       <h3 class="fw-bold mb-3">Quiz Terminé !</h3>
       <p class="lead mb-4">
         Votre score : <span class="fw-bold"
-          :class="score === quiz.questions.length ? 'text-success' : 'text-primary'">{{ score }} / {{
+          :class="score === quiz.questions.length ? 'text-success' : 'text-primary'">{{
+            score }} / {{
             quiz.questions.length }}</span>
       </p>
 
@@ -161,5 +215,16 @@ function close() {
 <style scoped>
 .btn {
   transition: all 0.2s ease;
+}
+
+.quiz-container {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.explanation-box {
+  min-height: 100px;
 }
 </style>

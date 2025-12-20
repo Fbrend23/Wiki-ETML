@@ -2,7 +2,7 @@
 import { ref, watch, onMounted, computed, nextTick } from 'vue'
 import MarkdownIt from 'markdown-it'
 import MarkdownItAnchor from 'markdown-it-anchor'
-import { quizData } from '../data/quizData'
+import quizData from '../data/quizData.json'
 import QuizModal from './QuizModal.vue'
 
 const props = defineProps({

@@ -13,6 +13,7 @@
     "lint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
     "gen:audio": "node generate-audio.js",
+    "gen:quiz": "node generate-quiz.js",
     "gen:content": "node generate-index.js"
   },
   "dependencies": {
