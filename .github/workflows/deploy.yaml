@@ -1,6 +1,11 @@
 name: Deploy to Infomaniak
 on:
   workflow_dispatch:
+  release:
+    types: [published]
+  push:
+    paths:
+      - 'public/markdown/**'
 
 jobs:
   web-deploy:
