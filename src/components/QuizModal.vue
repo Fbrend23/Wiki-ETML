@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { BModal, BButton, BProgress } from 'bootstrap-vue-next'
 
 const props = defineProps({
@@ -27,12 +27,70 @@ const isAnswered = ref(false)
 const score = ref(0)
 const showResult = ref(false)
 
+const shuffledQuestions = ref([])
+
 const currentQuestion = computed(() => {
-  return props.quiz.questions[currentQuestionIndex.value]
+  return shuffledQuestions.value[currentQuestionIndex.value]
+})
+
+function shuffleArray(questions) {
+  // Deep copy first
+  const shuffledQs = JSON.parse(JSON.stringify(questions));
+
+  // 1. Shuffle the order of questions
+  for (let i = shuffledQs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledQs[i], shuffledQs[j]] = [shuffledQs[j], shuffledQs[i]];
+  }
+
+  // 2. Shuffle options within each question
+  shuffledQs.forEach(q => {
+    // Pair options with their original index to track the correct answer
+    const optionsWithIndex = q.options.map((opt, idx) => ({ opt, originalIdx: idx }));
+
+    // Shuffle the options
+    for (let i = optionsWithIndex.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [optionsWithIndex[i], optionsWithIndex[j]] = [optionsWithIndex[j], optionsWithIndex[i]];
+    }
+
+    // Update the question's options with the shuffled text
+    q.options = optionsWithIndex.map(o => o.opt);
+
+    // Create a map: originalIndex -> newIndex
+    const indexMap = {};
+    optionsWithIndex.forEach((item, newIdx) => {
+      indexMap[item.originalIdx] = newIdx;
+    });
+
+    // Remap the correctAnswer(s) to the new positions
+    if (Array.isArray(q.correctAnswer)) {
+      q.correctAnswer = q.correctAnswer.map(oldIdx => indexMap[oldIdx]);
+    } else {
+      q.correctAnswer = indexMap[q.correctAnswer];
+    }
+  });
+
+  return shuffledQs;
+}
+
+// Initial shuffle when quiz changes or modal opens
+watch(() => props.quiz, (newQuiz) => {
+  if (newQuiz && newQuiz.questions) {
+    shuffledQuestions.value = shuffleArray(newQuiz.questions)
+  }
+}, { immediate: true })
+
+// Also shuffle when modal opens via v-model
+watch(isOpen, (val) => {
+  if (val) {
+    shuffledQuestions.value = shuffleArray(props.quiz.questions)
+    resetQuizState()
+  }
 })
 
 const progress = computed(() => {
-  return ((currentQuestionIndex.value) / props.quiz.questions.length) * 100
+  return ((currentQuestionIndex.value) / shuffledQuestions.value.length) * 100
 })
 
 
@@ -86,19 +144,24 @@ function nextQuestion() {
   selectedOption.value = null
   isAnswered.value = false
 
-  if (currentQuestionIndex.value < props.quiz.questions.length - 1) {
+  if (currentQuestionIndex.value < shuffledQuestions.value.length - 1) {
     currentQuestionIndex.value++
   } else {
     showResult.value = true
   }
 }
 
-function resetQuiz() {
+function resetQuizState() {
   currentQuestionIndex.value = 0
   selectedOption.value = null
   isAnswered.value = false
   score.value = 0
   showResult.value = false
+}
+
+function resetQuiz() {
+  shuffledQuestions.value = shuffleArray(props.quiz.questions)
+  resetQuizState()
 }
 
 function close() {
@@ -113,7 +176,7 @@ function close() {
       <!-- Progress Bar -->
       <div class="mb-4">
         <div class="d-flex justify-content-between text-muted small mb-1">
-          <span>Question {{ currentQuestionIndex + 1 }} / {{ quiz.questions.length }}</span>
+          <span>Question {{ currentQuestionIndex + 1 }} / {{ shuffledQuestions.length }}</span>
           <span>{{ Math.round(progress) }}%</span>
         </div>
         <BProgress :value="progress" height="8px" variant="primary" />
@@ -183,21 +246,22 @@ function close() {
           Valider
         </BButton>
         <BButton v-else variant="primary" size="lg" @click="nextQuestion">
-          {{ currentQuestionIndex < quiz.questions.length - 1 ? 'Question Suivante' : 'Voir les Résultats' }} </BButton>
+          {{ currentQuestionIndex < shuffledQuestions.length - 1 ? 'Question Suivante' : 'Voir les Résultats' }}
+            </BButton>
       </div>
     </div>
 
     <!-- Results Screen -->
     <div v-else class="text-center py-4">
       <div class="mb-4 display-1">
-        {{ score >= quiz.questions.length / 2 ? '🎉' : '📚' }}
+        {{ score >= shuffledQuestions.length / 2 ? '🎉' : '📚' }}
       </div>
       <h3 class="fw-bold mb-3">Quiz Terminé !</h3>
       <p class="lead mb-4">
         Votre score : <span class="fw-bold"
-          :class="score === quiz.questions.length ? 'text-success' : 'text-primary'">{{
+          :class="score === shuffledQuestions.length ? 'text-success' : 'text-primary'">{{
             score }} / {{
-            quiz.questions.length }}</span>
+            shuffledQuestions.length }}</span>
       </p>
 
       <div class="d-flex justify-content-center gap-3">
