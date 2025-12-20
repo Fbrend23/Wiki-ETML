@@ -4,8 +4,6 @@
 
 Source: C-294-ALL01-Touring Vue Router (ETML ICT 294).
 
-> Pas d'audio
-
 ## 1. Redirections simples
 
 ```js

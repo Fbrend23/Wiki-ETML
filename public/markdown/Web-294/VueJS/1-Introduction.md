@@ -4,8 +4,6 @@
 
 Source: C-294-ALL01-Touring Vue Router (ETML ICT 294).
 
-> Pas d'audio
-
 ## Objectif du module
 
 Ce cours présente les fondamentaux de Vue Router et montre comment structurer une application à page unique (SPA) avec Vue.js.  

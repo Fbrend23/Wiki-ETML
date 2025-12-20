@@ -4,8 +4,6 @@
 
 Résumé des notions clés du cours Touring Vue Router.
 
-> Pas d'audio
-
 ## Query et Params
 
 - query : `$route.query`
