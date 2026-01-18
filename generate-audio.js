@@ -117,8 +117,18 @@ async function generateAudio() {
     const lastHash = manifest[relativePath]
     const audioExists = fs.existsSync(audioPath)
 
-    // Skip if nothing changed AND audio exists
+    // Cas 1 : Tout est à jour
     if (audioExists && lastHash === currentHash) {
+      continue
+    }
+
+    // Cas 2 : Migration / Premier lancement avec fichiers existants
+    // Si l'audio existe mais qu'on a pas de hash (nouveau système), on fait confiance au fichier existant
+    // pour éviter de tout payer/régénérer.
+    if (audioExists && !lastHash) {
+      console.log(` Migration: Audio existant trouvé pour ${relativePath}. Ajout au manifest.`)
+      manifest[relativePath] = currentHash
+      hasChanges = true
       continue
     }
 
