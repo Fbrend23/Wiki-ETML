@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
       - name: Récupérer le code
@@ -51,11 +52,17 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run gen:quiz
 
-      - name: Sauvegarder les quizs (Commit & Push)
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Créer un PR pour les quiz générés
+        uses: peter-evans/create-pull-request@v6
         with:
-          commit_message: 'Auto-generate quiz data [skip ci]'
-          file_pattern: 'src/data/quizData.json'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update quiz data [skip ci]'
+          title: '🤖 Mise à jour automatique des Quiz'
+          body: |
+            Mise à jour automatique du fichier `src/data/quizData.json` suite à la génération par l'IA.
+            Ce PR permet de persister les quiz générés sans violer la règle de protection de branche.
+          branch: 'auto/quiz-update'
+          delete-branch: true
 
       - name: Build
         run: npm run build
