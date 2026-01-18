@@ -49,6 +49,12 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run gen:quiz
 
+      - name: Sauvegarder les quizs (Commit & Push)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Auto-generate quiz data [skip ci]'
+          file_pattern: 'src/data/quizData.json'
+
       - name: Build
         run: npm run build
 
