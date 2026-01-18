@@ -5,9 +5,12 @@ import 'dotenv/config'
 import process from 'node:process'
 import { Buffer } from 'node:buffer'
 
+import crypto from 'node:crypto'
+
 const OPENAI_KEY = process.env.OPENAI_API_KEY
 const MARKDOWN_DIR = 'public/markdown'
 const AUDIO_DIR = 'public/audio'
+const MANIFEST_FILE = path.join(AUDIO_DIR, 'audio-manifest.json')
 
 const BASE_SYSTEM_INSTRUCTION = `
 Tu es un expert pédagogique chargé de préparer des scripts pour un podcast éducatif destiné à des étudiants en informatique.
@@ -66,6 +69,10 @@ function splitTextIntoChunks(text) {
   return chunks
 }
 
+function calculateHash(content) {
+  return crypto.createHash('md5').update(content).digest('hex')
+}
+
 async function generateAudio() {
   if (!OPENAI_KEY) {
     console.error('Erreur : Pas de clé API OpenAI trouvée dans .env')
@@ -74,6 +81,18 @@ async function generateAudio() {
 
   const files = await glob(`${MARKDOWN_DIR}/**/*.md`)
   console.log(`${files.length} fichiers trouvés.`)
+
+  // Load Manifest
+  let manifest = {}
+  if (fs.existsSync(MANIFEST_FILE)) {
+    try {
+      manifest = JSON.parse(fs.readFileSync(MANIFEST_FILE, 'utf-8'))
+    } catch (e) {
+      console.warn('Manifest corrompu, redémarrage à zéro.')
+    }
+  }
+
+  let hasChanges = false
 
   for (const file of files) {
     const relativePath = path.relative(MARKDOWN_DIR, file)
@@ -84,20 +103,31 @@ async function generateAudio() {
     if (!fs.existsSync(audioDir)) {
       fs.mkdirSync(audioDir, { recursive: true })
     }
-    if (fs.existsSync(audioPath)) {
+
+    const content = fs.readFileSync(file, 'utf-8')
+    if (content.includes('NoAudio')) {
+      // Clean up if it exists
+      if (fs.existsSync(audioPath)) {
+        // fs.unlinkSync(audioPath) // Optional: delete existing?
+      }
+      continue
+    }
+
+    const currentHash = calculateHash(content)
+    const lastHash = manifest[relativePath]
+    const audioExists = fs.existsSync(audioPath)
+
+    // Skip if nothing changed AND audio exists
+    if (audioExists && lastHash === currentHash) {
       continue
     }
 
     console.log(`\nTraitement de : ${relativePath}`)
+    if (!audioExists) console.log(' -> Audio manquant.')
+    else console.log(' -> Contenu modifié.')
 
-    const content = fs.readFileSync(file, 'utf-8')
-    if (content.includes('NoAudio')) {
-      console.log(` Audio désactivé pour ${relativePath}`)
-      continue
-    }
     const instructionMatch = content.match(/<!-- INSTRUCTION_AUDIO:([\s\S]*?)-->/)
     const extraInstruction = instructionMatch ? instructionMatch[1].trim() : ''
-
     const contentBody = instructionMatch ? content.replace(instructionMatch[0], '') : content
 
     try {
@@ -142,7 +172,7 @@ async function generateAudio() {
 
       for (let i = 0; i < textChunks.length; i++) {
         const chunk = textChunks[i]
-        console.log(`   - Chunk ${i + 1}/${textChunks.length} (${chunk.length} chars)`)
+        // console.log(`   - Chunk ${i + 1}/${textChunks.length} (${chunk.length} chars)`)
 
         const audioResponse = await fetch('https://api.openai.com/v1/audio/speech', {
           method: 'POST',
@@ -164,19 +194,27 @@ async function generateAudio() {
         }
 
         const arrayBuffer = await audioResponse.arrayBuffer()
-
         audioBuffers.push(Buffer.from(arrayBuffer))
       }
 
       const finalBuffer = Buffer.concat(audioBuffers)
-
       fs.writeFileSync(audioPath, finalBuffer)
       console.log(`Succès ! Audio enregistré.`)
+
+      // Update Manifest
+      manifest[relativePath] = currentHash
+      hasChanges = true
 
       await sleep(1000)
     } catch (err) {
       console.error(`Erreur sur ${relativePath} :`, err.message)
     }
+  }
+
+  // Save Manifest if updated
+  if (hasChanges) {
+    fs.writeFileSync(MANIFEST_FILE, JSON.stringify(manifest, null, 2))
+    console.log('\nManifest audio mis à jour.')
   }
 }
 
