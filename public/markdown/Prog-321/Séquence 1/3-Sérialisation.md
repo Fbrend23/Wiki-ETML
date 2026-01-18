@@ -1,3 +1,5 @@
+<!--  -->
+
 # Fiche de Révision : Sérialisation & Désérialisation
 
 ## 1. Définition
