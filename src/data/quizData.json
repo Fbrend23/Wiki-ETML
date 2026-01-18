@@ -390,5 +390,1439 @@
         "explanation": "Le texte indique : 'les attaques de brute-force sont de plus en plus réalistes, et l’utilisation d’algorithmes de hash lents est absolument indispensable.'"
       }
     ]
+  },
+  "/markdown/Web-294/VueJS/6-Paramètres URL.md": {
+    "title": "Quiz: Paramètres URL",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel est l'avantage de passer les paramètres comme props dans un composant Vue ?",
+        "options": [
+          "Pour rendre les composants dépendants du routeur.",
+          "Pour rendre les composants indépendants du routeur.",
+          "Pour simplifier le code du routeur.",
+          "Pour éviter d'utiliser des paramètres dynamiques."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Recommandé pour rendre les composants indépendants du routeur.'"
+      },
+      {
+        "id": 2,
+        "text": "Comment accède-t-on aux paramètres de requête dans un template Vue ?",
+        "options": [
+          "{{ $route.query.page }}",
+          "{{ $route.params.page }}",
+          "{{ props.page }}",
+          "{{ query.page }}"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Dans un template : {{ $route.query.page }}'"
+      },
+      {
+        "id": 3,
+        "text": "Quels sont les points clés mentionnés pour l'utilisation des paramètres dans Vue Router ?",
+        "options": [
+          "query = `$route.query`",
+          "params = `$route.params`",
+          "props = découplage recommandé",
+          "props fonction = transformation possible"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Le texte indique : '- query = `$route.query` - params = `$route.params` - props = découplage recommandé - props fonction = transformation possible'"
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Les paramètres dynamiques sont définis dans le routeur avec la syntaxe '/events/:page'.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Définition dans le routeur : { path: \"/events/:page\", component: EventList }'"
+      },
+      {
+        "id": 5,
+        "text": "Quelle méthode est utilisée pour transformer les props en fonction des paramètres de requête ?",
+        "options": [
+          "props: { showExtra: true }",
+          "props: (route) => ({ showExtra: route.query.e === 'true' })",
+          "props: { showExtra: route.query.e }",
+          "props: (route) => ({ showExtra: true })"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'props: (route) => ({ showExtra: route.query.e === 'true', })'"
+      }
+    ]
+  },
+  "/markdown/Web-294/VueJS/5-Synthese.md": {
+    "title": "Quiz: Synthese",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quels sont les deux objets utilisés pour accéder aux paramètres de route et aux requêtes dans Vue Router ?",
+        "options": [
+          "$route.query et $route.params",
+          "$route.path et $route.name",
+          "$route.meta et $route.fullPath",
+          "$route.hash et $route.matched"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'query : $route.query' et 'params : $route.params'."
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les moyens d'utiliser les props dans les routes selon le texte ?",
+        "options": [
+          "props: true",
+          "props: false",
+          "props: { ... }",
+          "props: route => ({ ... })"
+        ],
+        "correctAnswer": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Le texte mentionne : 'props: true', 'props: { ... }', et 'props: route => ({ ... })'."
+      },
+      {
+        "id": 3,
+        "text": "Quel est l'objectif de l'utilisation de 'watchEffect' dans le contexte de la pagination ?",
+        "options": [
+          "Pour la mise à jour",
+          "Pour la suppression",
+          "Pour l'ajout",
+          "Pour la lecture"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'watchEffect pour la mise à jour'."
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Les routes imbriquées permettent de réduire la duplication des requêtes API.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte mentionne : 'Reduce duplication des requêtes API' en parlant des routes imbriquées."
+      },
+      {
+        "id": 5,
+        "text": "Quelle est la fonction de 'redirect' dans Vue Router selon le texte ?",
+        "options": [
+          "Pour modification d’URL",
+          "Pour ajouter des routes",
+          "Pour supprimer des routes",
+          "Pour créer des vues"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'redirect pour modification d’URL'."
+      }
+    ]
+  },
+  "/markdown/Web-294/VueJS/4-Redirections et alias.md": {
+    "title": "Quiz: Redirections et alias",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quelle est la fonction d'une redirection simple dans Vue Router ?",
+        "options": [
+          "Elle permet de changer le composant affiché sans changer l'URL.",
+          "Elle redirige une URL vers une autre URL.",
+          "Elle permet de créer plusieurs chemins pour un même composant.",
+          "Elle modifie le nom du composant."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'path: \"/about\", redirect: { name: \"About\" }' montrant que '/about' redirige vers '/about-us'."
+      },
+      {
+        "id": 2,
+        "text": "Quel est l'avantage d'utiliser un alias dans Vue Router ?",
+        "options": [
+          "Il permet de rediriger une URL vers une autre.",
+          "Il permet de garder plusieurs URL valides pour le même composant.",
+          "Il permet de supprimer une ancienne URL.",
+          "Il permet de créer des redirections dynamiques."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Préférer alias si plusieurs URL doivent rester valides'."
+      },
+      {
+        "id": 3,
+        "text": "Quelle est la différence entre une redirection et un alias selon le texte ?",
+        "options": [
+          "Une redirection est utilisée pour garder plusieurs URL valides.",
+          "Un alias est utilisé pour rediriger une URL vers une autre.",
+          "Une redirection est préférée si l’ancienne URL doit disparaître.",
+          "Un alias est préféré si l’ancienne URL doit disparaître."
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'Préférer redirect si l’ancienne URL doit disparaître'."
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Un alias permet de rediriger dynamiquement une URL vers une autre.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte ne mentionne pas l'utilisation d'alias pour des redirections dynamiques, mais plutôt pour garder plusieurs URL valides."
+      },
+      {
+        "id": 5,
+        "text": "Quels sont les cas d'utilisation recommandés pour les redirections et les alias ?",
+        "options": [
+          "Redirection pour garder plusieurs URL valides, alias pour supprimer une ancienne URL.",
+          "Alias pour garder plusieurs URL valides, redirection pour supprimer une ancienne URL.",
+          "Redirection pour des chemins dynamiques, alias pour des chemins statiques.",
+          "Alias pour des chemins dynamiques, redirection pour des chemins statiques."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Préférer redirect si l’ancienne URL doit disparaître' et 'Préférer alias si plusieurs URL doivent rester valides'."
+      }
+    ]
+  },
+  "/markdown/Web-294/VueJS/3-Pagination.md": {
+    "title": "Quiz: Pagination",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel est le rôle de la fonction getEvents dans le service API ?",
+        "options": [
+          "Elle récupère tous les événements sans pagination.",
+          "Elle récupère un nombre limité d'événements pour une page donnée.",
+          "Elle met à jour les événements existants.",
+          "Elle supprime les événements d'une page spécifique."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'getEvents(perPage, page) { return apiClient.get(`/events?_limit=${perPage}&_page=${page}`) }', ce qui montre qu'elle récupère un nombre limité d'événements pour une page donnée."
+      },
+      {
+        "id": 2,
+        "text": "Comment la page actuelle est-elle déterminée dans le composant Vue ?",
+        "options": [
+          "Elle est fixée à 1 par défaut.",
+          "Elle est extraite des paramètres de l'URL.",
+          "Elle est calculée à partir du nombre total d'événements.",
+          "Elle est définie par l'utilisateur dans le composant."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'props: (route) => ({ page: parseInt(route.query.page) || 1, })', ce qui montre que la page est fixée à 1 par défaut si elle n'est pas spécifiée."
+      },
+      {
+        "id": 3,
+        "text": "Quelles sont les actions déclenchées par watchEffect dans EventList.vue ?",
+        "options": [
+          "Il initialise les événements à null et recharge les données.",
+          "Il met à jour le style de la pagination.",
+          "Il change la route actuelle.",
+          "Il supprime les événements obsolètes."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'watchEffect(async () => { events.value = null const response = await EventService.getEvents(perPage, props.page) events.value = response.data totalEvents.value = parseInt(response.headers['x-total-count']) })', ce qui montre qu'il initialise les événements à null et recharge les données."
+      },
+      {
+        "id": 4,
+        "text": "Quels éléments déterminent la présence du lien 'Next' dans la pagination ?",
+        "options": [
+          "La page actuelle doit être inférieure au nombre total de pages.",
+          "La page actuelle doit être supérieure à 1.",
+          "Le nombre total d'événements doit être supérieur à zéro.",
+          "La page actuelle doit être un nombre pair."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'const isNextPage = computed(() => { const totalPages = Math.ceil(totalEvents.value / perPage) return props.page < totalPages })', ce qui montre que la page actuelle doit être inférieure au nombre total de pages."
+      },
+      {
+        "id": 5,
+        "text": "Vrai ou Faux : La propriété x-total-count est utilisée pour déterminer le nombre total de pages.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'x-total-count détermine le nombre de pages', ce qui prouve que c'est vrai."
+      }
+    ]
+  },
+  "/markdown/Web-294/VueJS/2-Routes imbriquées.md": {
+    "title": "Quiz: Routes imbriquées",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel est le problème principal du routage initial mentionné dans le texte ?",
+        "options": [
+          "Duplication de code",
+          "Navigation incohérente",
+          "Complexité accrue",
+          "Absence de layout"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte mentionne : 'Problèmes : Duplication de code'."
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les avantages des routes imbriquées selon le texte ?",
+        "options": [
+          "Une seule requête API",
+          "Navigation cohérente",
+          "Code simplifié",
+          "Meilleure performance"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte énumère les avantages : 'Une seule requête API', 'Navigation cohérente', 'Code simplifié'."
+      },
+      {
+        "id": 3,
+        "text": "Quel composant est utilisé pour centraliser le layout dans les routes imbriquées ?",
+        "options": [
+          "<router-link>",
+          "<router-view>",
+          "<event-layout>",
+          "<event-details>"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : '<router-view :event=\"event\" />' pour centraliser le layout."
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Les routes imbriquées nécessitent plusieurs requêtes API.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte mentionne comme avantage : 'Une seule requête API'."
+      },
+      {
+        "id": 5,
+        "text": "Quel est l'exemple de composant enfant fourni dans le texte ?",
+        "options": [
+          "Layout.vue",
+          "Details.vue",
+          "Register.vue",
+          "Edit.vue"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte donne un exemple de composant enfant : 'Exemple Details.vue'."
+      }
+    ]
+  },
+  "/markdown/Web-294/VueJS/1-Introduction.md": {
+    "title": "Quiz: Introduction",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel est l'objectif principal du cours sur Vue Router ?",
+        "options": [
+          "Apprendre à utiliser Vue.js pour créer des applications mobiles.",
+          "Présenter les fondamentaux de Vue Router et structurer une SPA avec Vue.js.",
+          "Développer des compétences en gestion de bases de données.",
+          "Apprendre à utiliser React pour le développement web."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Ce cours présente les fondamentaux de Vue Router et montre comment structurer une application à page unique (SPA) avec Vue.js.'"
+      },
+      {
+        "id": 2,
+        "text": "Quels éléments sont configurés dans le fichier 'src/router/index.js' ?",
+        "options": [
+          "Les chemins d’URL, le composant associé, et le nom de la route.",
+          "Les styles CSS et les animations.",
+          "Les bases de données et les API.",
+          "Les tests unitaires et l'intégration continue."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Ce fichier définit : Les chemins d’URL (path), Le composant associé (component), Le nom de la route (name), Les paramètres dynamiques (:id), La transmission de données via props, Les routes enfants (children)'"
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : Vue Router permet de gérer la navigation entre composants.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Les notions abordées incluent : Navigation entre composants.'"
+      },
+      {
+        "id": 4,
+        "text": "Quels sont les composants de l'application d'événements utilisée dans le cours ?",
+        "options": [
+          "Liste d'événements, Page de détails, Page d'inscription",
+          "Page de connexion, Page de profil, Page de paramètres",
+          "Tableau de bord, Page de statistiques, Page de support",
+          "Page d'accueil, Page de contact, Page de blog"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Le cours développe une application d’événements comprenant : Liste d'événements, Pagination, Page de détails, Page d'inscription, Page d'édition, Layout partagé, Gestion de redirections.'"
+      },
+      {
+        "id": 5,
+        "text": "Quelles notions sont abordées dans le cours sur Vue Router ?",
+        "options": [
+          "Gestion des URL, Paramètres de requête, Routes imbriquées",
+          "Gestion des utilisateurs, Sécurité des données, Optimisation des performances",
+          "Développement mobile, Réseaux sociaux, Marketing digital",
+          "Intégration continue, Déploiement, Tests automatisés"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Les notions abordées incluent : Gestion des URL, Navigation entre composants, Paramètres de requête et paramètres dynamiques, Pagination, Routes imbriquées, Redirections et alias.'"
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/9-Hashing & Algorithmes.md": {
+    "title": "Quiz: Hashing & Algorithmes",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Pourquoi MD5 est-il considéré comme compromis pour la sécurité ?",
+        "options": [
+          "Il est trop lent pour les calculs modernes.",
+          "Il est mathématiquement possible de créer des collisions.",
+          "Il utilise une clé de 256 bits.",
+          "Il est encore largement utilisé dans les systèmes modernes."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Il est mathématiquement possible (et facile aujourd'hui) de créer deux fichiers différents qui produisent exactement la même empreinte MD5.'"
+      },
+      {
+        "id": 2,
+        "text": "Quelles sont les conséquences de la vitesse de calcul rapide de MD5 ?",
+        "options": [
+          "Les mots de passe hachés en MD5 sont cassés quasi instantanément.",
+          "Il ralentit suffisamment les attaquants.",
+          "Il est impossible de voler une base de données.",
+          "Les attaques par brute-force sont inefficaces."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Les mots de passe hachés en MD5 sont cassés quasi instantanément par \"brute-force\".'"
+      },
+      {
+        "id": 3,
+        "text": "Quels algorithmes sont recommandés pour remplacer MD5 ?",
+        "options": [
+          "bcrypt",
+          "Argon2",
+          "MD5",
+          "SHA-256/512"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Le texte indique : 'Les algorithmes recommandés : bcrypt, Argon2, PBKDF2, SHA-256/512.'"
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : MD5 est encore sûr à utiliser pour les signatures numériques.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'MD5 est considéré comme cryptographiquement brisé et dangereux à utiliser aujourd'hui pour la sécurité.'"
+      },
+      {
+        "id": 5,
+        "text": "Quelle est la taille de l'algorithme MD5 qui le rend vulnérable ?",
+        "options": [
+          "64 bits",
+          "128 bits",
+          "256 bits",
+          "512 bits"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Le problème : L'algorithme est trop court (128 bits) et structurellement faible.'"
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/8-JWT.md": {
+    "title": "Quiz: JWT",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quelle est la structure d'un JWT ?",
+        "options": [
+          "header.payload.signature",
+          "header.signature.payload",
+          "payload.header.signature",
+          "signature.payload.header"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'JWT1 — Structure : header.payload.signature'."
+      },
+      {
+        "id": 2,
+        "text": "Quels éléments sont contenus dans le 'header' d'un JWT ?",
+        "options": [
+          "algorithme et type",
+          "données (claims)",
+          "garantit l’intégrité",
+          "ID de session"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'header : algorithme + type'."
+      },
+      {
+        "id": 3,
+        "text": "Pourquoi le JWT est-il considéré comme 'stateless' ?",
+        "options": [
+          "Il permet une authentification sans état.",
+          "Il nécessite le stockage de sessions sur le serveur.",
+          "Il facilite les architectures distribuées.",
+          "Il utilise des sessions serveur."
+        ],
+        "correctAnswer": [
+          0,
+          2
+        ],
+        "explanation": "Le texte indique : 'Permet une authentification stateless, évite l'utilisation de sessions serveur, facilite les architectures distribuées.'"
+      },
+      {
+        "id": 4,
+        "text": "Quel est le principal risque de sécurité lié au stockage du JWT dans le LocalStorage ?",
+        "options": [
+          "Vulnérabilité aux failles CSRF",
+          "Accessibilité via JavaScript",
+          "Perte de données utilisateur",
+          "Expiration prématurée du jeton"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Si vous stockez le JWT dans le LocalStorage du navigateur : Il est accessible via JavaScript.'"
+      },
+      {
+        "id": 5,
+        "text": "Vrai ou Faux : Le JWT nécessite que le serveur stocke des informations en mémoire.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Le serveur ne stocke rien en mémoire. Il crée un jeton (JWT) contenant les infos de l'utilisateur.'"
+      },
+      {
+        "id": 6,
+        "text": "Quels sont les avantages du JWT par rapport aux sessions classiques ?",
+        "options": [
+          "Autonomie du client",
+          "Réduction de la charge serveur",
+          "Synchronisation complexe des sessions",
+          "Facilité d'utilisation des microservices"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Le texte indique : 'Avec le JWT, on cherche à rendre le client (le navigateur) autonome.' et 'Le problème : Si vous avez 1 million d'utilisateurs ou si vous utilisez plusieurs serveurs (cluster/microservices), synchroniser cette mémoire devient très lourd et complexe.'"
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/7-OWASP.md": {
+    "title": "Quiz: OWASP",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quelle est la vulnérabilité la plus courante dans les applications modernes selon OWASP ?",
+        "options": [
+          "Injection",
+          "Cryptographic Failures",
+          "Broken Access Control",
+          "Security Misconfiguration"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'C’est la vulnérabilité la plus courante dans les applications modernes.'"
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les problèmes liés aux défaillances cryptographiques ?",
+        "options": [
+          "Mauvais choix d’algorithmes",
+          "Clés trop courtes",
+          "Données non chiffrées",
+          "Accès non autorisé"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne : 'Problèmes liés : au mauvais choix d’algorithmes, à des clés trop courtes, à des données non chiffrées.'"
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : L'injection est passée de la 1ère à la 3ème place dans le classement OWASP.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Elle glisse de la 1ère à la 3ème place, mais reste critique.'"
+      },
+      {
+        "id": 4,
+        "text": "Quels types d'injections sont mentionnés dans le texte ?",
+        "options": [
+          "SQL",
+          "NoSQL",
+          "OS command",
+          "LDAP"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Le texte liste : 'Types : SQL, NoSQL, OS command, LDAP, Email header, Template injection.'"
+      },
+      {
+        "id": 5,
+        "text": "Quelle est une conséquence possible des défaillances cryptographiques ?",
+        "options": [
+          "Fuite massive de données",
+          "Escalade de privilèges",
+          "Consultation de données d'un autre utilisateur",
+          "Debug actif en production"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte mentionne : 'Les conséquences peuvent être désastreuses : fuite massive de données, déchiffrement, accès non autorisé.'"
+      },
+      {
+        "id": 6,
+        "text": "Quelles sont les erreurs fréquentes de mauvaise configuration de sécurité ?",
+        "options": [
+          "Debug actif en prod",
+          "Ports/admin exposés",
+          "Headers de sécurité absents",
+          "Fichiers sensibles non supprimés"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Le texte énumère : 'Erreurs fréquentes : debug actif en prod, ports/admin exposés, headers de sécurité absents, fichiers sensibles non supprimés.'"
+      },
+      {
+        "id": 7,
+        "text": "Vrai ou Faux : OWASP est une organisation mondiale dédiée à la sécurité.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'OWASP est une organisation mondiale dédiée à la sécurité.'"
+      },
+      {
+        "id": 8,
+        "text": "Quels outils ou guides sont produits par OWASP ?",
+        "options": [
+          "OWASP ZAP",
+          "OWASP Juice Shop",
+          "Web Security Testing Guide (WSTG)",
+          "OWASP Top 10"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Le texte mentionne : 'Elle produit : guides pratiques, le célèbre OWASP Top 10, une base complète de bonnes pratiques. OWASP ZAP (Scanner de vulnérabilités). OWASP Juice Shop (Application vulnérable pour l'entraînement). Web Security Testing Guide (WSTG).' "
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/6-Outils d’audit & Méthodologies.md": {
+    "title": "Quiz: Outils d’audit & Méthodologies",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel outil d'audit est décrit comme open-source et idéal pour les étudiants ?",
+        "options": [
+          "OWASP ZAP",
+          "Burp Suite",
+          "Nmap",
+          "Metasploit"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'OWASP ZAP : open-source, idéal pour étudiants.'"
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les avantages du Black Box Testing ?",
+        "options": [
+          "Conditions réalistes",
+          "Indépendance vis-à-vis de la documentation",
+          "Couverture de test complète",
+          "Rapidité"
+        ],
+        "correctAnswer": [
+          0,
+          1
+        ],
+        "explanation": "Le texte mentionne : 'Conditions réalistes (simulation d'attaque externe).' et 'Indépendance vis-à-vis de la documentation (souvent fausse).'"
+      },
+      {
+        "id": 3,
+        "text": "Metasploit peut-il être utilisé sur Swisscom sans autorisation ?",
+        "options": [
+          "Oui",
+          "Non"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte précise : 'Non. Toute attaque sans autorisation : viole la loi suisse, peut mener à des poursuites pénales, viole les conditions d'utilisation des opérateurs.'"
+      },
+      {
+        "id": 4,
+        "text": "Quels outils d'audit intègrent un proxy, un scanner et un repeater ?",
+        "options": [
+          "OWASP ZAP",
+          "Burp Suite",
+          "Nmap",
+          "Metasploit"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Burp Suite : complet, intègre proxy, scanner, repeater.'"
+      },
+      {
+        "id": 5,
+        "text": "Quelles sont les caractéristiques du Black Box Testing ?",
+        "options": [
+          "Le testeur connaît le code source",
+          "Le testeur ne connaît rien de l'application",
+          "Il simule le point de vue d’un pirate réel",
+          "Il est plus rapide que le White Box Testing"
+        ],
+        "correctAnswer": [
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne : 'Le testeur ne connaît rien de l’application : pas de code, pas de documentation, pas d’accès interne.' et 'Il simule le point de vue d’un pirate réel.'"
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/5-Sécurité des e-mails & images.md": {
+    "title": "Quiz: Sécurité des e mails & images",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quelle est une faiblesse de l'obfuscation simple pour protéger une adresse mail ?",
+        "options": [
+          "Très simple, lisible par l'humain.",
+          "Inefficace, les bots modernes comprennent cette syntaxe.",
+          "Invisible pour l'utilisateur, affichage normal.",
+          "L'adresse n'apparaît pas en clair dans le code source."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Faiblesse : Inefficace, les bots modernes comprennent cette syntaxe.'"
+      },
+      {
+        "id": 2,
+        "text": "Quelles sont les forces de l'encodage JavaScript pour protéger une adresse mail ?",
+        "options": [
+          "L'adresse n'apparaît pas en clair dans le code source.",
+          "Nécessite un moteur JS.",
+          "Protection antispam (Captcha).",
+          "Invisible pour l'utilisateur, affichage normal."
+        ],
+        "correctAnswer": [
+          0,
+          1
+        ],
+        "explanation": "Le texte indique : 'Force : L'adresse n'apparaît pas en clair dans le code source, nécessite un moteur JS.'"
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : Le watermarking est une méthode invisible pour prouver la paternité d'une image.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Watermarking : visible, dissuasif contre la réutilisation.'"
+      },
+      {
+        "id": 4,
+        "text": "Qui paie généralement pour une signature numérique ?",
+        "options": [
+          "L'utilisateur individuel.",
+          "L'organisation ou le professionnel.",
+          "Les bots sophistiqués.",
+          "Les services de certification."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'C’est donc en général l'organisation ou le professionnel qui a besoin de prouver l’authenticité d’une image.'"
+      },
+      {
+        "id": 5,
+        "text": "Quelles sont les faiblesses de l'encodage JavaScript pour protéger une adresse mail ?",
+        "options": [
+          "Protection faible, les bots décodent le HTML.",
+          "Inaccessible si JS est désactivé.",
+          "Les bots sophistiqués l'exécutent.",
+          "Plus complexe à mettre en place (backend nécessaire)."
+        ],
+        "correctAnswer": [
+          1,
+          2
+        ],
+        "explanation": "Le texte indique : 'Faiblesse : Inaccessible si JS est désactivé, et les bots sophistiqués l'exécutent.'"
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/4-Attaques DDoS & Défense.md": {
+    "title": "Quiz: Attaques DDoS & Défense",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Qu'est-ce qu'une attaque DDoS vise à accomplir ?",
+        "options": [
+          "Améliorer la vitesse du serveur",
+          "Rendre le service indisponible",
+          "Augmenter la sécurité du serveur",
+          "Réduire le nombre de requêtes"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Une attaque DDoS consiste à submerger un serveur par des milliers ou millions de requêtes simultanées. Objectif : rendre le service indisponible.'"
+      },
+      {
+        "id": 2,
+        "text": "Quel est l'avantage d'un TTL DNS faible ?",
+        "options": [
+          "Il permet de changer rapidement l'adresse IP du serveur",
+          "Il augmente la sécurité du serveur",
+          "Il réduit le nombre de requêtes",
+          "Il améliore la vitesse du serveur"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Un TTL faible (ex: 60s) permet : de changer rapidement l'adresse IP du serveur si l'actuelle est attaquée.'"
+      },
+      {
+        "id": 3,
+        "text": "Quelles méthodes sont utilisées pour mitiger une attaque DDoS ?",
+        "options": [
+          "CDN",
+          "Rate limiting",
+          "Load balancing",
+          "Augmentation de la bande passante"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne : 'CDN : absorption du trafic. Rate limiting : limite les requêtes abusives. Load balancing : répartit la charge.'"
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Un TTL faible est une protection complète contre les attaques DDoS.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Ce n’est pas une protection complète, mais un outil parmi d’autres.'"
+      },
+      {
+        "id": 5,
+        "text": "Quel rôle joue un firewall applicatif dans la mitigation des attaques DDoS ?",
+        "options": [
+          "Il absorbe le trafic",
+          "Il bloque les patterns suspects",
+          "Il répartit la charge",
+          "Il change l'adresse IP du serveur"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Firewall applicatif : bloque les patterns suspects.'"
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/3-Injections.md": {
+    "title": "Quiz: Injections",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quels opérateurs peuvent être exploités dans une injection NoSQL sur MongoDB ?",
+        "options": [
+          "$ne",
+          "$gt",
+          "$regex",
+          "$or"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Le texte mentionne : 'exploiter les opérateurs `$ne`, `$gt`, `$regex`, `$or`.'"
+      },
+      {
+        "id": 2,
+        "text": "Pourquoi le payload `' OR '1'='1` est-il efficace ?",
+        "options": [
+          "Il force la condition SQL à être toujours vraie.",
+          "Il utilise des requêtes préparées.",
+          "Il masque les erreurs SQL.",
+          "Il utilise des ORM sécurisés."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Ce payload fonctionne car il force la condition SQL à être **toujours vraie**.'"
+      },
+      {
+        "id": 3,
+        "text": "Quelles actions une injection SQL peut-elle permettre si aucune protection n'est appliquée ?",
+        "options": [
+          "Lire les données",
+          "Modifier les tables",
+          "Supprimer les tables",
+          "Créer des tables"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Le texte précise : 'une injection peut non seulement lire les données, mais aussi : modifier, supprimer, créer des tables.'"
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Une bonne API doit exposer les messages techniques des erreurs SQL.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Une bonne API : masque les messages techniques.'"
+      },
+      {
+        "id": 5,
+        "text": "Quelles sont les recommandations pour masquer les erreurs SQL ?",
+        "options": [
+          "Définir NODE_ENV=production pour Node.js",
+          "Configurer le driver MySQL avec debug: false",
+          "Utiliser des blocs try/catch",
+          "Renvoyer l'objet error brut au client"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte recommande : 'Définir `NODE_ENV=production` pour désactiver les stacktraces détaillées', 'Configurer le driver avec `debug: false`', et 'Utiliser des blocs `try/catch` et ne jamais renvoyer l'objet `error` brut au client.'"
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/2-XSS & Manipulation du DOM.md": {
+    "title": "Quiz: XSS & Manipulation du DOM",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Qu'est-ce qu'une faille XSS permet à un attaquant de faire ?",
+        "options": [
+          "Exécuter du JavaScript dans la page consultée par la victime.",
+          "Accéder directement à la base de données du serveur.",
+          "Modifier les fichiers du serveur.",
+          "Bloquer l'accès au site pour tous les utilisateurs."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Une faille XSS permet à un attaquant : d’exécuter du JavaScript, dans la page consultée par la victime, sans toucher au serveur.'"
+      },
+      {
+        "id": 2,
+        "text": "Quelles sont les méthodes de protection contre les XSS en Node.js ?",
+        "options": [
+          "Échappement systématique du contenu.",
+          "Utilisation de frameworks modernes.",
+          "Validation stricte côté serveur.",
+          "Utilisation de bases de données sécurisées."
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne : 'Protection efficace → combinaison de plusieurs approches : Échappement systématique du contenu, Frameworks modernes, Validation stricte côté serveur.'"
+      },
+      {
+        "id": 3,
+        "text": "Une XSS peut-elle voler un mot de passe directement ?",
+        "options": [
+          "Oui, directement.",
+          "Non, seulement indirectement.",
+          "Oui, mais seulement si le serveur est compromis.",
+          "Non, c'est impossible."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Indirectement, oui. Une XSS peut voler les cookies de session, voler les tokens JWT, intercepter les frappes, imiter un formulaire de connexion.'"
+      },
+      {
+        "id": 4,
+        "text": "Quel est l'effet du script fourni dans l'exemple XSS4 ?",
+        "options": [
+          "Il affiche un message dans la console.",
+          "Il redirige l'utilisateur vers un site malveillant.",
+          "Il modifie le contenu du serveur.",
+          "Il bloque l'accès à la page pour l'utilisateur."
+        ],
+        "correctAnswer": [
+          0,
+          1
+        ],
+        "explanation": "Le texte décrit : 'Message console : Affiche \"you have been hacked by Narut0\". Vol de session : Redirige l'utilisateur vers spoof.cookie.com.'"
+      },
+      {
+        "id": 5,
+        "text": "Quel est l'un des scénarios XSS les plus classiques et dangereux ?",
+        "options": [
+          "Exécution d'un script qui modifie le serveur.",
+          "Exécution d'un script qui redirige l'utilisateur et exfiltre des cookies.",
+          "Exécution d'un script qui bloque l'accès au site.",
+          "Exécution d'un script qui efface les données de l'utilisateur."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'C’est l’un des scénarios XSS les plus classiques et les plus dangereux.'"
+      },
+      {
+        "id": 6,
+        "text": "D'où provient la faille dans une injection DOM ?",
+        "options": [
+          "Du côté serveur.",
+          "Du côté client.",
+          "Des bases de données.",
+          "Des fichiers de configuration."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte précise : 'Ici, la faille provient du côté client, souvent lorsque on insère du HTML directement dans innerHTML.'"
+      },
+      {
+        "id": 7,
+        "text": "Vrai ou Faux : Les attaques XSS passent toujours par le serveur.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Ces attaques ne passent parfois même pas par le serveur, ce qui les rend difficiles à détecter.'"
+      }
+    ]
+  },
+  "/markdown/Sécurité-183/Questions/10-Divers & Sécurité générale.md": {
+    "title": "Quiz: Divers & Sécurité générale",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quels sont les risques associés à l'utilisation de librairies tierces ?",
+        "options": [
+          "Vulnérabilités connues",
+          "Attaques de la Supply Chain",
+          "Abandon du projet",
+          "Toutes les réponses ci-dessus"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Le texte mentionne plusieurs risques : 'Vulnérabilités connues (CVE)', 'Attaques de la Supply Chain', et 'Abandon du projet'."
+      },
+      {
+        "id": 2,
+        "text": "Quelles sont les solutions pour sécuriser les données en transit ?",
+        "options": [
+          "Chiffrement du disque",
+          "TLS/SSL",
+          "OWASP Dependency Check",
+          "Verrouiller les versions"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Solution : Chiffrement via TLS/SSL (HTTPS, WSS, VPN)'."
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : Le chiffrement au repos protège les données interceptées sur le réseau Wi-Fi.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte précise : 'le chiffrement disque ne protège pas les données interceptées sur le Wi-Fi'."
+      },
+      {
+        "id": 4,
+        "text": "Quelles sont les bonnes pratiques pour gérer les dépendances de librairies ?",
+        "options": [
+          "Utiliser npm audit",
+          "Verrouiller les versions",
+          "Minimiser le nombre de dépendances",
+          "Toutes les réponses ci-dessus"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Le texte recommande : 'Utiliser npm audit ou OWASP Dependency Check', 'Verrouiller les versions', et 'Minimiser le nombre de dépendances'."
+      },
+      {
+        "id": 5,
+        "text": "Quels sont les risques pour les données au repos ?",
+        "options": [
+          "Interception (Man-in-the-Middle)",
+          "Vol physique du serveur",
+          "Écoute (Sniffing)",
+          "Accès non autorisé au système de fichiers"
+        ],
+        "correctAnswer": [
+          1,
+          3
+        ],
+        "explanation": "Le texte mentionne : 'Risque : Vol physique du serveur, vol de disque dur, accès non autorisé au système de fichiers'."
+      }
+    ]
+  },
+  "/markdown/Prog-321/Séquence 1/3-Sérialisation.md": {
+    "title": "Quiz: Sérialisation",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Qu'est-ce que la sérialisation ?",
+        "options": [
+          "Le processus de conversion d'un objet en mémoire en un format transportable ou stockable.",
+          "Le processus de conversion d'un flux en un objet en mémoire.",
+          "Une méthode pour compresser des fichiers.",
+          "Un protocole de communication réseau."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'La sérialisation est le processus de conversion d'un objet en mémoire en un format transportable ou stockable.'"
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les avantages de la sérialisation ?",
+        "options": [
+          "Transport des données via réseau.",
+          "Sauvegarde de l'état d'un programme.",
+          "Interopérabilité entre langages différents.",
+          "Compression des données."
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne : 'Transport : Envoyer des données via réseau', 'Persistance : Sauvegarder l'état d'un programme', et 'Interopérabilité : Faire communiquer deux programmes écrits dans des langages différents.'"
+      },
+      {
+        "id": 3,
+        "text": "Quel format est décrit comme 'léger, lisible par l'homme, standard du Web' ?",
+        "options": [
+          "XML",
+          "JSON",
+          "Protobuf",
+          "Avro"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'JSON : Léger, lisible par l'homme, standard du Web.'"
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Le format XML est très compact et ultra-rapide.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique que 'XML' est 'Très verbeux (lourd)' et non compact ou ultra-rapide."
+      },
+      {
+        "id": 5,
+        "text": "Quel attribut C# est utilisé pour exclure des données sensibles lors de la sérialisation ?",
+        "options": [
+          "[JsonConstructor]",
+          "[JsonIgnore]",
+          "[Serializable]",
+          "[DataContract]"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : '[JsonIgnore] : Permet d'éviter de propager des mots de passe ou des clés API.'"
+      },
+      {
+        "id": 6,
+        "text": "Pourquoi est-il important d'utiliser l'attribut [JsonConstructor] ?",
+        "options": [
+          "Pour exclure des données sensibles.",
+          "Pour indiquer au désérialiseur quel constructeur utiliser.",
+          "Pour compresser les données.",
+          "Pour améliorer la performance de la sérialisation."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : '[JsonConstructor] : Indique d'utiliser ce constructeur précis.'"
+      },
+      {
+        "id": 7,
+        "text": "Quels sont les défis et limites de la sérialisation ?",
+        "options": [
+          "Les formats de date varient.",
+          "La désérialisation de données inconnues est dangereuse.",
+          "Les formats texte consomment plus de CPU et de bande passante.",
+          "La sérialisation est toujours sécurisée."
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne : 'Le temps (Dates)', 'Sécurité : La désérialisation de données inconnues est dangereuse', et 'Performance : Les formats texte consomment plus de CPU et de bande passante.'"
+      },
+      {
+        "id": 8,
+        "text": "Quel est le standard indispensable pour les dates selon le texte ?",
+        "options": [
+          "RFC 2822",
+          "ISO 8601",
+          "Unix Timestamp",
+          "RFC 3339"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'La norme à utiliser est l'ISO 8601.'"
+      },
+      {
+        "id": 9,
+        "text": "Quel format est décrit comme 'illisible sans outil spécialisé' ?",
+        "options": [
+          "JSON",
+          "XML",
+          "Protobuf / Avro",
+          "CSV"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'Protobuf / Avro : Illisible sans outil spécialisé.'"
+      }
+    ]
+  },
+  "/markdown/Prog-321/Séquence 1/2-NTP.md": {
+    "title": "Quiz: NTP",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Pourquoi la désynchronisation des horloges est-elle un problème dans un réseau distribué ?",
+        "options": [
+          "Elle empêche de déterminer l'ordre réel des événements.",
+          "Elle permet de synchroniser les événements avec précision.",
+          "Elle garantit que tous les nœuds ont la même heure.",
+          "Elle améliore la performance du réseau."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Désynchronisation : Empêche de déterminer l'ordre réel des événements.'"
+      },
+      {
+        "id": 2,
+        "text": "Quelles sont les caractéristiques du PTP par rapport au NTP ?",
+        "options": [
+          "Précision en millisecondes",
+          "Utilisation de matériel dédié",
+          "Architecture de type Grandmaster/Slaves",
+          "Très tolérant aux délais réseau"
+        ],
+        "correctAnswer": [
+          1,
+          2
+        ],
+        "explanation": "Le texte indique : 'PTP (Precision Time Protocol) : Précision Microseconde à Nanoseconde, Matériel dédié (Timestamping hardware), Grandmaster / Slaves.'"
+      },
+      {
+        "id": 3,
+        "text": "Quelle est la fonction principale des horloges logiques selon Lamport ?",
+        "options": [
+          "Garantir l'heure réelle",
+          "Assurer la causalité",
+          "Synchroniser les horloges physiques",
+          "Réduire le décalage"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Objectif : Garantir la causalité (l'ordre relatif) plutôt que l'heure réelle.'"
+      },
+      {
+        "id": 4,
+        "text": "Quel est l'avantage principal de l'utilisation de `FakeClock` dans les tests unitaires ?",
+        "options": [
+          "Il permet de simuler des scénarios temporels complexes.",
+          "Il améliore la précision des horloges physiques.",
+          "Il garantit que le temps avance toujours.",
+          "Il synchronise automatiquement les horloges du système."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Le FakeClock permet de simuler des scénarios temporels complexes (ex: le passage à la nouvelle année) sans attendre.'"
+      },
+      {
+        "id": 5,
+        "text": "Vrai ou Faux : NTP est plus précis que PTP.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'NTP : Précision Milliseconde (ms), PTP : Précision Microseconde à Nanoseconde.'"
+      },
+      {
+        "id": 6,
+        "text": "Quel est le rôle du décalage (Offset) dans le protocole NTP ?",
+        "options": [
+          "C'est la valeur de correction à appliquer.",
+          "Il mesure la qualité de la ligne.",
+          "Il synchronise les horloges logiques.",
+          "Il ajuste l'horloge locale automatiquement."
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Le Décalage (Offset) : C'est la valeur de correction à appliquer.'"
+      },
+      {
+        "id": 7,
+        "text": "Quelle est l'architecture utilisée par NTP ?",
+        "options": [
+          "Grandmaster / Slaves",
+          "Stratum (Hiérarchie de serveurs)",
+          "Peer-to-peer",
+          "Client-Serveur"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'NTP : Architecture Stratum (Hiérarchie de serveurs).' "
+      },
+      {
+        "id": 8,
+        "text": "Quel protocole est requis pour des applications nécessitant une très haute précision comme le trading ?",
+        "options": [
+          "NTP",
+          "PTP",
+          "HTTP",
+          "FTP"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'PTP est requis pour le trading ou les télécoms (précision ).'"
+      }
+    ]
+  },
+  "/markdown/Prog-321/Séquence 1/1-Microservices.md": {
+    "title": "Quiz: Microservices",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quelle est la principale caractéristique de l'architecture microservices ?",
+        "options": [
+          "Une application monolithique",
+          "Des services petits, autonomes et spécialisés",
+          "Un seul langage de programmation",
+          "Une communication uniquement synchrone"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'L'architecture microservices consiste à décomposer une application monolithique en une série de services petits, autonomes et spécialisés.'"
+      },
+      {
+        "id": 2,
+        "text": "Quel est un avantage de l'indépendance des services dans une architecture microservices ?",
+        "options": [
+          "Chaque service doit être déployé en même temps que les autres",
+          "Chaque service peut être codé, testé et déployé sans impacter les autres",
+          "Tous les services doivent utiliser le même langage de programmation",
+          "Les services ne peuvent pas être autonomes"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Indépendance : Chaque service peut être codé, testé et déployé sans impacter les autres.'"
+      },
+      {
+        "id": 3,
+        "text": "Quels protocoles sont mentionnés pour la communication réseau dans une architecture microservices ?",
+        "options": [
+          "HTTP et FTP",
+          "TCP et UDP",
+          "SMTP et IMAP",
+          "SSH et Telnet"
+        ],
+        "correctAnswer": [
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne : 'Protocoles de bas niveau : UDP (User Datagram Protocol) et TCP (Transmission Control Protocol).' et 'Protocole Applicatif : HTTP & JSON.'"
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Le protocole TCP est utilisé pour sa rapidité dans le streaming vidéo.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'UDP (User Datagram Protocol) : Vitesse : Très rapide (pas de vérification). Usage : Streaming vidéo, jeux en ligne (on accepte de perdre une image).' TCP est utilisé pour sa fiabilité, pas pour le streaming vidéo."
+      },
+      {
+        "id": 5,
+        "text": "Quel est un avantage de l'utilisation d'un Bus de messages ?",
+        "options": [
+          "Les services sont bloqués en attendant une réponse",
+          "Le message reste dans le bus et sera traité dès que le service redémarre",
+          "Il n'y a pas de résilience",
+          "Les messages sont perdus si le service de notification tombe en panne"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Avantages : Si le service de notification tombe en panne, le message reste dans le bus et sera traité dès qu'il redémarre (Résilience).' "
+      },
+      {
+        "id": 6,
+        "text": "Quels sont les avantages de l'architecture microservices ?",
+        "options": [
+          "Scalabilité et résilience",
+          "Complexité et latence",
+          "Sécurité et gestion des données",
+          "Simplicité et performance pure"
+        ],
+        "correctAnswer": [
+          0,
+          1
+        ],
+        "explanation": "Le texte indique : 'Les Forces : Scalabilité, Résilience, Évolutivité, Flexibilité.'"
+      },
+      {
+        "id": 7,
+        "text": "Vrai ou Faux : La communication synchrone via HTTP est totalement découplée et tolérante aux pannes.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Synchrone (HTTP) = Dépendance forte (si le receveur est mort, l'appel échoue).' La communication synchrone n'est pas totalement découplée et tolérante aux pannes."
+      },
+      {
+        "id": 8,
+        "text": "Quel est un défi de l'architecture microservices ?",
+        "options": [
+          "Facilité de gestion des données",
+          "Complexité accrue",
+          "Simplicité de déploiement",
+          "Performance pure"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Les Défis : Complexité : Gérer 50 services est plus dur qu'un seul (déploiement, surveillance).' "
+      },
+      {
+        "id": 9,
+        "text": "Pourquoi est-il important que les microservices aient des horloges synchronisées ?",
+        "options": [
+          "Pour assurer la sécurité des données",
+          "Pour que l'ordre des événements reste cohérent",
+          "Pour améliorer la performance pure",
+          "Pour réduire la latence"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Note sur la synchronisation : Pour que les microservices coordonnent leurs actions (notamment via les bus de messages), ils doivent avoir des horloges synchronisées pour que l'ordre des événements reste cohérent.'"
+      }
+    ]
   }
 }
