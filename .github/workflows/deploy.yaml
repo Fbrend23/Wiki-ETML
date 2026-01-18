@@ -52,6 +52,9 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run gen:quiz
 
+      - name: Build
+        run: npm run build
+
       - name: Créer un PR pour les quiz générés
         uses: peter-evans/create-pull-request@v6
         with:
@@ -63,9 +66,6 @@ jobs:
             Ce PR permet de persister les quiz générés sans violer la règle de protection de branche.
           branch: 'auto/quiz-update'
           delete-branch: true
-
-      - name: Build
-        run: npm run build
 
       - name: Envoyer sur Infomaniak (FTP)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
