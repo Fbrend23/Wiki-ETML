@@ -1748,7 +1748,7 @@
         ],
         "correctAnswer": [
           1,
-          2
+          0
         ],
         "explanation": "Le texte mentionne : 'Protocoles de bas niveau : UDP (User Datagram Protocol) et TCP (Transmission Control Protocol).' et 'Protocole Applicatif : HTTP & JSON.'"
       },
