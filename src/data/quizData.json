@@ -1741,7 +1741,7 @@
         "id": 3,
         "text": "Quels protocoles sont mentionnés pour la communication réseau dans une architecture microservices ?",
         "options": [
-          "HTTP et FTP",
+          "HTTP",
           "TCP et UDP",
           "SMTP et IMAP",
           "SSH et Telnet"
