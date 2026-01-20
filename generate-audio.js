@@ -87,7 +87,7 @@ async function generateAudio() {
   if (fs.existsSync(MANIFEST_FILE)) {
     try {
       manifest = JSON.parse(fs.readFileSync(MANIFEST_FILE, 'utf-8'))
-    } catch (e) {
+    } catch {
       console.warn('Manifest corrompu, redémarrage à zéro.')
     }
   }
@@ -95,7 +95,10 @@ async function generateAudio() {
   let hasChanges = false
 
   for (const file of files) {
-    const relativePath = path.relative(MARKDOWN_DIR, file)
+    // Normalisation du chemin : Slashes '/' et Unicode NFC
+    let relativePath = path.relative(MARKDOWN_DIR, file).split(path.sep).join('/').normalize('NFC')
+
+    // Construction du chemin audio (OS dependent path is fine here, but we use the normalized relative path for consistency)
     const audioPath = path.join(AUDIO_DIR, relativePath.replace(/\.md$/, '.mp3'))
 
     // Création des dossiers si nécessaire
@@ -105,6 +108,9 @@ async function generateAudio() {
     }
 
     const content = fs.readFileSync(file, 'utf-8')
+    // Normalisation des sauts de ligne pour le hash (évite les diffs Windows/Linux)
+    const contentNormalized = content.replace(/\r\n/g, '\n')
+
     if (content.includes('NoAudio')) {
       // Clean up if it exists
       if (fs.existsSync(audioPath)) {
@@ -113,7 +119,7 @@ async function generateAudio() {
       continue
     }
 
-    const currentHash = calculateHash(content)
+    const currentHash = calculateHash(contentNormalized)
     const lastHash = manifest[relativePath]
     const audioExists = fs.existsSync(audioPath)
 
@@ -133,8 +139,9 @@ async function generateAudio() {
     }
 
     console.log(`\nTraitement de : ${relativePath}`)
-    if (!audioExists) console.log(' -> Audio manquant.')
-    else console.log(' -> Contenu modifié.')
+    if (!lastHash) console.log(' -> Nouveau fichier (absent du manifest).')
+    else if (lastHash !== currentHash) console.log(` -> Contenu modifié (Hash mismatch).`)
+    else if (!audioExists) console.log(' -> Audio manquant.')
 
     const instructionMatch = content.match(/<!-- INSTRUCTION_AUDIO:([\s\S]*?)-->/)
     const extraInstruction = instructionMatch ? instructionMatch[1].trim() : ''
