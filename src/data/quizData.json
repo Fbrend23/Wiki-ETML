@@ -1779,7 +1779,7 @@
         "text": "Quels sont les avantages de l'architecture microservices ?",
         "options": [
           "Scalabilité et résilience",
-          "Complexité et latence",
+          "Évolutivité et flexibilité",
           "Sécurité et gestion des données",
           "Simplicité et performance pure"
         ],
