@@ -108,8 +108,8 @@ async function generateAudio() {
     }
 
     const content = fs.readFileSync(file, 'utf-8')
-    // Normalisation des sauts de ligne pour le hash (évite les diffs Windows/Linux)
-    const contentNormalized = content.replace(/\r\n/g, '\n')
+    // Normalisation Agressive : Strip BOM + CRLF/CR => LF
+    const contentNormalized = content.replace(/^\uFEFF/, '').replace(/\r\n|\r/g, '\n')
 
     if (content.includes('NoAudio')) {
       // Clean up if it exists
@@ -140,8 +140,11 @@ async function generateAudio() {
 
     console.log(`\nTraitement de : ${relativePath}`)
     if (!lastHash) console.log(' -> Nouveau fichier (absent du manifest).')
-    else if (lastHash !== currentHash) console.log(` -> Contenu modifié (Hash mismatch).`)
-    else if (!audioExists) console.log(' -> Audio manquant.')
+    else if (lastHash !== currentHash) {
+      console.log(` -> Contenu modifié (Hash mismatch).`)
+      console.log(`    Ancien: ${lastHash}`)
+      console.log(`    Nouveau: ${currentHash}`)
+    } else if (!audioExists) console.log(' -> Audio manquant.')
 
     const instructionMatch = content.match(/<!-- INSTRUCTION_AUDIO:([\s\S]*?)-->/)
     const extraInstruction = instructionMatch ? instructionMatch[1].trim() : ''
