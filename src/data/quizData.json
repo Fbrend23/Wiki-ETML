@@ -1824,5 +1824,97 @@
         "explanation": "Le texte indique : 'Note sur la synchronisation : Pour que les microservices coordonnent leurs actions (notamment via les bus de messages), ils doivent avoir des horloges synchronisées pour que l'ordre des événements reste cohérent.'"
       }
     ]
+  },
+  "/markdown/Prog-321/Séquence 2/MQTT.md": {
+    "title": "Quiz: MQTT",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quel est le rôle principal du broker dans l'architecture MQTT ?",
+        "options": [
+          "Communiquer directement avec les clients",
+          "Gérer les connexions clients et distribuer les messages",
+          "Publier des messages sur des topics",
+          "S'abonner à des topics"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Le broker est le serveur central MQTT. Rôles principaux : gérer les connexions clients, recevoir les messages publiés, distribuer les messages aux abonnés.'"
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les niveaux de qualité de service (QoS) proposés par MQTT ?",
+        "options": [
+          "QoS 0 — au plus une fois",
+          "QoS 1 — au moins une fois",
+          "QoS 2 — exactement une fois",
+          "QoS 3 — toujours une fois"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne : 'MQTT propose trois niveaux de QoS : QoS 0 — au plus une fois, QoS 1 — au moins une fois, QoS 2 — exactement une fois.'"
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : Les clients MQTT communiquent directement entre eux.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte précise : 'Les clients ne communiquent jamais directement entre eux. Tous les échanges passent par un broker.'"
+      },
+      {
+        "id": 4,
+        "text": "Quelle est la fonction des caractères génériques dans MQTT ?",
+        "options": [
+          "Ils permettent de publier des messages sur plusieurs topics.",
+          "Ils permettent de s'abonner à plusieurs topics.",
+          "Ils empêchent la réception de messages en double.",
+          "Ils sont utilisés pour définir la qualité de service."
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'MQTT permet de s’abonner à plusieurs topics via des caractères génériques.'"
+      },
+      {
+        "id": 5,
+        "text": "Qu'est-ce que le Last Will and Testament (LWT) dans MQTT ?",
+        "options": [
+          "Un mécanisme pour garantir la livraison unique des messages",
+          "Un mécanisme pour signaler une déconnexion anormale",
+          "Un système pour conserver l'état d'un client entre deux connexions",
+          "Une méthode pour envoyer des messages à plusieurs niveaux de topics"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte explique : 'Last Will and Testament (LWT) : Mécanisme permettant de signaler une déconnexion anormale.'"
+      },
+      {
+        "id": 6,
+        "text": "Quels éléments sont conservés dans une session persistante MQTT ?",
+        "options": [
+          "Les abonnements",
+          "Les messages non délivrés",
+          "Les messages publiés",
+          "Les connexions clients"
+        ],
+        "correctAnswer": [
+          0,
+          1
+        ],
+        "explanation": "Le texte précise : 'Session persistante : abonnements conservés, messages non délivrés stockés.'"
+      },
+      {
+        "id": 7,
+        "text": "Vrai ou Faux : L'option NoLocal empêche un client de recevoir ses propres messages.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte mentionne : 'Option NoLocal (MQTT 5.0) : Empêche un client de recevoir ses propres messages.'"
+      }
+    ]
   }
 }
