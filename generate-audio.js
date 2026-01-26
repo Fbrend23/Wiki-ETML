@@ -108,14 +108,14 @@ async function generateAudio() {
     }
 
     const content = fs.readFileSync(file, 'utf-8')
-    // Normalisation Agressive : Strip BOM + CRLF/CR => LF
-    const contentNormalized = content.replace(/^\uFEFF/, '').replace(/\r\n|\r/g, '\n')
+    // Normalisation Agressive : Strip BOM + CRLF/CR => LF + Trim
+    const contentNormalized = content
+      .replace(/^\uFEFF/, '')
+      .replace(/\r\n|\r/g, '\n')
+      .trim()
 
     if (content.includes('NoAudio')) {
       // Clean up if it exists
-      if (fs.existsSync(audioPath)) {
-        // fs.unlinkSync(audioPath) // Optional: delete existing?
-      }
       continue
     }
 
@@ -125,6 +125,20 @@ async function generateAudio() {
 
     // Cas 1 : Tout est à jour
     if (audioExists && lastHash === currentHash) {
+      continue
+    }
+
+    // Cas 1.5 : Migration de Hash (Legacy -> Normalized)
+    // Si le hash du manifest correspond au contenu BRUT (ancien comportement),
+    // mais que le fichier audio existe, c'est que le contenu n'a pas changé, juste notre algo de hash.
+    // On met à jour le manifest avec le nouveau hash normalisé et on SKIP la génération.
+    const legacyHash = calculateHash(content)
+    if (audioExists && lastHash === legacyHash) {
+      console.log(
+        ` Migration Hash: Mise à jour du manifest pour ${relativePath} (Legacy -> Normalized).`,
+      )
+      manifest[relativePath] = currentHash
+      hasChanges = true
       continue
     }
 
