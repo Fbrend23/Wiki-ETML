@@ -1916,5 +1916,126 @@
         "explanation": "Le texte mentionne : 'Option NoLocal (MQTT 5.0) : Empêche un client de recevoir ses propres messages.'"
       }
     ]
+  },
+  "/markdown/Prog-321/Séquence 2/2-Monitoring.md": {
+    "title": "Quiz: Monitoring",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Qu'est-ce que le monitoring permet de vérifier en continu dans un système informatique ?",
+        "options": [
+          "La sécurité des données",
+          "L'état, la performance et la disponibilité",
+          "Le coût de maintenance",
+          "La compatibilité logicielle"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Le monitoring désigne l’ensemble des mécanismes permettant de surveiller en continu l’état, la performance et la disponibilité d’un système informatique.'"
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les avantages du monitoring actif ?",
+        "options": [
+          "Charge minimale sur le réseau",
+          "Contrôle centralisé",
+          "Détection rapide des pannes franches",
+          "Facilité de mise en place"
+        ],
+        "correctAnswer": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Le texte indique : 'Avantages : Contrôle centralisé, Mesures régulières et comparables dans le temps, Détection rapide des pannes franches, Facilité de mise en place.'"
+      },
+      {
+        "id": 3,
+        "text": "Quel est le rôle principal d'un Service Level Indicator (SLI) ?",
+        "options": [
+          "Définir un engagement contractuel",
+          "Mesurer l'état ou la performance d'un élément du système",
+          "Fixer une valeur cible à atteindre",
+          "Détecter les incidents"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Un SLI est une mesure chiffrée représentant l’état ou la performance d’un élément du système.'"
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Le monitoring réactif repose sur une interrogation périodique des composants surveillés.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Le monitoring réactif repose sur la remontée d’événements ou de données à l’initiative du système surveillé.'"
+      },
+      {
+        "id": 5,
+        "text": "Quels sont les exemples de monitoring actif mentionnés dans le texte ?",
+        "options": [
+          "Ping ICMP pour vérifier la disponibilité d’un hôte",
+          "Logs applicatifs envoyés en continu",
+          "Requêtes HTTP pour tester une API",
+          "Métriques poussées vers un collecteur"
+        ],
+        "correctAnswer": [
+          0,
+          2
+        ],
+        "explanation": "Le texte indique : 'Exemples : Ping ICMP pour vérifier la disponibilité d’un hôte, Requêtes HTTP pour tester une API.'"
+      },
+      {
+        "id": 6,
+        "text": "Quel est l'engagement contractuel envers les utilisateurs dans le cadre du monitoring ?",
+        "options": [
+          "Service Level Indicator (SLI)",
+          "Service Level Objective (SLO)",
+          "Service Level Agreement (SLA)",
+          "Service Level Evaluation (SLE)"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'Le SLA est un engagement contractuel envers les utilisateurs.'"
+      },
+      {
+        "id": 7,
+        "text": "Quels sont les critères de comparaison entre le monitoring actif et réactif ?",
+        "options": [
+          "Initiative",
+          "Fréquence",
+          "Charge",
+          "Vision globale"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "explanation": "Le texte indique : 'Critère : Initiative, Fréquence, Charge, Vision globale.'"
+      },
+      {
+        "id": 8,
+        "text": "Vrai ou Faux : Le monitoring actif a une charge plus élevée que le monitoring réactif.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Le texte indique : 'Charge : Plus élevée pour le monitoring actif, Faible pour le monitoring réactif.'"
+      },
+      {
+        "id": 9,
+        "text": "Quel est un des principaux objectifs du monitoring selon le texte ?",
+        "options": [
+          "Augmenter les coûts d'exploitation",
+          "Anticiper les incidents",
+          "Réduire la performance du système",
+          "Complexifier la maintenance"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Il permet d’anticiper les incidents grâce à l’analyse des tendances.'"
+      }
+    ]
   }
 }
