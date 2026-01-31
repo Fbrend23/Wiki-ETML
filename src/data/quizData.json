@@ -2037,5 +2037,128 @@
         "explanation": "Le texte indique : 'Il permet d’anticiper les incidents grâce à l’analyse des tendances.'"
       }
     ]
+  },
+  "/markdown/Prog-321/Séquence 1/4-Idempotence.md": {
+    "title": "Quiz: Idempotence",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quelle est la propriété principale de l'idempotence ?",
+        "options": [
+          "Produire un état final différent à chaque exécution",
+          "Produire exactement le même état final une ou plusieurs fois",
+          "Garantir une exécution rapide",
+          "Assurer une sécurité maximale"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'L’idempotence est une propriété d’une opération garantissant que son exécution une ou plusieurs fois produit exactement le même état final.'"
+      },
+      {
+        "id": 2,
+        "text": "Quels problèmes l'idempotence aide-t-elle à éviter dans les systèmes distribués ?",
+        "options": [
+          "Les doublons",
+          "Les effets cumulés non désirés",
+          "Les incohérences en cas de retransmission",
+          "Les erreurs de syntaxe"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte mentionne que l'idempotence est essentielle pour éviter : 'les doublons, les effets cumulés non désirés, les incohérences en cas de retransmission.'"
+      },
+      {
+        "id": 3,
+        "text": "Vrai ou Faux : Le QoS 1 de MQTT garantit qu'un message est livré exactement une fois.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'QoS 1 : livré au moins une fois → duplications possibles.'"
+      },
+      {
+        "id": 4,
+        "text": "Quelle méthode HTTP est idempotente ?",
+        "options": [
+          "POST",
+          "PUT",
+          "GET",
+          "DELETE"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'PUT — Idempotent' et 'POST — Non idempotent.'"
+      },
+      {
+        "id": 5,
+        "text": "Quels sont les effets d'une requête POST répétée ?",
+        "options": [
+          "Ne modifie pas l'état final",
+          "Crée plusieurs ressources",
+          "Provoque des doublons",
+          "Remplace une ressource existante"
+        ],
+        "correctAnswer": [
+          1,
+          2
+        ],
+        "explanation": "Le texte indique : 'Une même requête POST répétée : crée plusieurs ressources, provoque des doublons si aucune protection n’est mise en place.'"
+      },
+      {
+        "id": 6,
+        "text": "Comment rendre une requête POST idempotente ?",
+        "options": [
+          "En fournissant un identifiant unique côté client",
+          "En utilisant uniquement le serveur pour générer l'ID",
+          "En refusant les doublons côté serveur",
+          "En augmentant la QoS"
+        ],
+        "correctAnswer": [
+          0,
+          2
+        ],
+        "explanation": "Le texte indique : 'Plusieurs stratégies existent : fournir un identifiant unique côté client, refuser les doublons côté serveur.'"
+      },
+      {
+        "id": 7,
+        "text": "Quel est le rôle du champ 'MessageId' dans un message MQTT ?",
+        "options": [
+          "Augmenter la vitesse de transmission",
+          "Détecter les doublons",
+          "Améliorer la sécurité",
+          "Réduire la taille du message"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Le champ `MessageId` permet de détecter les doublons.'"
+      },
+      {
+        "id": 8,
+        "text": "Quels éléments sont nécessaires pour garantir l'idempotence dans un système événementiel ?",
+        "options": [
+          "Chaque message possède un identifiant unique",
+          "Le consommateur conserve la trace des messages déjà traités",
+          "Un message déjà traité est ignoré",
+          "Utiliser uniquement le protocole HTTP"
+        ],
+        "correctAnswer": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Le texte indique : 'Pour garantir l’idempotence dans un système événementiel : 1. Chaque message possède un identifiant unique, 2. Le consommateur conserve la trace des messages déjà traités, 3. Un message déjà traité est ignoré.'"
+      },
+      {
+        "id": 9,
+        "text": "Vrai ou Faux : Un système fiable est celui qui ne tombe jamais.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte conclut : 'Un système fiable n’est pas celui qui ne tombe jamais, mais celui qui résiste aux répétitions, aux erreurs et aux retries.'"
+      }
+    ]
   }
 }
