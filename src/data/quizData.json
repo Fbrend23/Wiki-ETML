@@ -2284,5 +2284,74 @@
         "explanation": "Le texte conclut : 'Un système fiable n’est pas celui qui ne tombe jamais, mais celui qui résiste aux répétitions, aux erreurs et aux retries.'"
       }
     ]
+  },
+  "/markdown/Prog-321/Séquence 4/Transactions.md": {
+    "title": "Quiz: Transactions",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Quelle propriété ACID garantit que les opérations d'une transaction sont invisibles pour les autres tant qu'elles ne sont pas validées ?",
+        "options": [
+          "Atomicité",
+          "Cohérence",
+          "Isolation",
+          "Durabilité"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Le texte indique : 'Isolation : Les opérations d'une transaction sont invisibles pour les autres tant qu'elles ne sont pas validées (commit).' "
+      },
+      {
+        "id": 2,
+        "text": "Quels sont les inconvénients du Two-Phase Commit (2PC) ?",
+        "options": [
+          "C'est un mécanisme rapide",
+          "C'est un mécanisme bloquant",
+          "C'est un mécanisme lent",
+          "Il ne garantit pas la cohérence"
+        ],
+        "correctAnswer": [
+          1,
+          2
+        ],
+        "explanation": "Le texte indique : 'Inconvénient : C'est un mécanisme bloquant et lent.'"
+      },
+      {
+        "id": 3,
+        "text": "Dans le contexte des transactions, que signifie l'idempotence ?",
+        "options": [
+          "Les opérations peuvent échouer sans conséquence",
+          "Les consommateurs doivent pouvoir traiter le même message plusieurs fois sans erreur",
+          "Les transactions sont annulées si une étape échoue",
+          "Les modifications sont permanentes une fois validées"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Idempotence obligatoire : Les consommateurs doivent pouvoir traiter le même message plusieurs fois sans erreur (en cas de retransmission).' "
+      },
+      {
+        "id": 4,
+        "text": "Vrai ou Faux : Les Sagas bloquent tout le système en cas d'échec d'une étape.",
+        "options": [
+          "Vrai",
+          "Faux"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Le texte indique : 'Au lieu de bloquer tout le système, on exécute les étapes les unes après les autres. Si une étape échoue, on lance une action de compensation pour annuler l'effet des étapes précédentes.'"
+      },
+      {
+        "id": 5,
+        "text": "Quels éléments sont essentiels pour la résilience dans les transactions selon le texte ?",
+        "options": [
+          "ACID",
+          "Sagas",
+          "Transaction",
+          "Idempotence"
+        ],
+        "correctAnswer": [
+          2,
+          3
+        ],
+        "explanation": "Le texte indique : 'Transaction + Idempotence = La combinaison indispensable pour la résilience.'"
+      }
+    ]
   }
 }
