@@ -21,7 +21,7 @@
     "bootstrap-vue-next": "^0.40.8",
     "dotenv": "^17.2.3",
     "glob": "^13.0.0",
-    "markdown-it": "^14.1.0",
+    "markdown-it": "^14.1.1",
     "markdown-it-anchor": "^9.2.0",
     "vue": "^3.5.25"
   },
